@@ -189,7 +189,7 @@ public class Waitlist
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Waitlist");
+            fileWriter = new FileWriter("src/Organising/Waitlist");
             writeWaitlistInfo(fileWriter, waitlistArray);
             fileWriter.close();
         } catch (IOException e)

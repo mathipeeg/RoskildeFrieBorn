@@ -3,6 +3,7 @@ package StaffMembers;
 import Members.Child;
 import Members.Parent;
 import Organising.Schedule;
+import Organising.Waitlist;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +16,7 @@ public class AdminOptions
     Parent parent = new Parent();
     Child child = new Child();
     Staff staff = new Staff();
+    Waitlist waitlist = new Waitlist();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String capLettersOnlyRegex = "^[a-zA-ZÆØÅæøå ]+$"; //kun bogstaver
@@ -78,7 +80,7 @@ public class AdminOptions
                     break;
                 case 6:
                     System.out.println("Venteliste");
-                    //Casper
+                    waitlistOptions();
                     break;
                 case 7:
                     System.out.println("Check kids");
@@ -204,6 +206,33 @@ public class AdminOptions
                     break;
             }
         }
+
+    }
+    private void waitlistOptions()
+    {
+            System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
+            int choice = scanner.nextInt();
+            switch (choice)
+            {
+                case 1:
+                    System.out.println("Venteliste");
+                    getWaitlist();
+                    break;
+                case 2:
+                    System.out.println("Opret barn");
+                    createChildWaitlist();
+                    break;
+                case 3:
+                    System.out.println("Slet barn");
+                    abortChildFromWaitlist();
+                    break;
+                case 4:
+                    System.out.println("Afslut");
+                    break;
+                default:
+                    System.out.println("Not gonna happen");
+                    break;
+            }
 
     }
 
@@ -337,6 +366,22 @@ public class AdminOptions
         parent.parentFileWriter(Parent.parentArray);
         System.out.println("YOUR KID HAS BEEN ABO--- DELETED");
     }
+    public void abortChildFromWaitlist()
+    {
+        System.out.println("Indtast ID på barn der skal slettes");
+        int id = scanner.nextInt();
+        int childId = -1;
+        for (int i = 0; i < Waitlist.waitlistArray.size(); i++)
+        {
+            if (Waitlist.waitlistArray.get(i).getId() == id)
+            {
+                childId = Waitlist.waitlistArray.get(i).getId();
+            }
+        }
+        Waitlist.waitlistArray.remove(childId);
+        waitlist.waitlistFileWriter(Waitlist.waitlistArray);
+        System.out.println("THE KID HAS BEEN ABO--- DELETED");
+    }
 
     public void createChild()
     {
@@ -368,6 +413,29 @@ public class AdminOptions
         System.out.println("Barn er blevet oprettet! Tillykke!");
     }
 
+    public void createChildWaitlist()
+    {
+        System.out.println("Lad os oprette et barn på ventelisten");
+        Waitlist newWaitlist = new Waitlist();
+
+        //Add parent
+        newWaitlist.setParentFirstname(validateStuff("fornavn på forældre", "Hint: Store forbogstaver", nameRegex));
+        newWaitlist.setParentLastname(validateStuff("efternavn på forældre", "Hint: Store forbogstaver", nameRegex));
+        newWaitlist.setEmail(validateStuff("e-mail", "Hint: eksempel@gmail.com", emailRegex));
+        newWaitlist.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 91827384", numberRegex)));
+        System.out.println("Venligst indtast adresse");
+        newWaitlist.setAddress(s.nextLine());
+        //Add child
+        newWaitlist.setId(Waitlist.waitlistArray.size());
+        newWaitlist.setBirthdate(validateStuff("fødselsdato på barn", "Hint: dd/MM-yyyy", birthdayRegex));
+        newWaitlist.setChildFirstname((validateStuff("fornavn på barn", "Hint: Store forbogstaver", nameRegex)));
+        newWaitlist.setChildLastname(validateStuff("efternavn på barn", "Hint: Store forbogstaver", nameRegex));
+        Waitlist.waitlistArray.add(newWaitlist);
+
+        waitlist.waitlistFileWriter(Waitlist.waitlistArray);
+
+        System.out.println("Barn er blevet oprettet på venteliste!");
+    }
     public Child getChild(int id)
     {
         for (int i = 0; i < Child.childArray.size(); i++)
@@ -390,6 +458,23 @@ public class AdminOptions
             }
         }
         return null;
+    }
+    public void getWaitlist()
+    {
+        for (int i = 0; i < Waitlist.waitlistArray.size(); i++)
+        {
+            System.out.println("Barnets ID: " + Waitlist.waitlistArray.get(i).getId());
+            System.out.println("Barnets navn: " + Waitlist.waitlistArray.get(i).getChildFirstname() +
+                    " " + Waitlist.waitlistArray.get(i).getChildLastname());
+            System.out.println("Foedsels dato (DD/MM-YYYY): " + Waitlist.waitlistArray.get(i).getBirthdate());
+            System.out.println("-------------------------------------------------");
+            System.out.println("Foraeldre navn: " + Waitlist.waitlistArray.get(i).getParentFirstname() +
+                    " " + Waitlist.waitlistArray.get(i).getParentLastname());
+            System.out.println(" Tlf.: " + Waitlist.waitlistArray.get(i).getPhone() +
+                    "Adresse: " + Waitlist.waitlistArray.get(i).getAddress());
+            System.out.println("E-mail: " + Waitlist.waitlistArray.get(i).getEmail());
+            System.out.println();
+        }
     }
 
     public Parent getParent(int parentId)
