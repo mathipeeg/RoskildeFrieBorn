@@ -8,10 +8,6 @@ public class Main
 {
     public static void main(String[] args)
     {
-        //Casper push!
-        //Grands push!
-        //Mads push!
-        //hej :)
         Child child = new Child();
         Parent parent = new Parent();
         Staff staff = new Staff();

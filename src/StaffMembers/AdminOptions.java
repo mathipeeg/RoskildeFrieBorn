@@ -48,48 +48,46 @@ public class AdminOptions
 
     public void options()
     {
-        while (true)
+
+        System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
+                "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
+                "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
         {
-            System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
-                    "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
-                    "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice)
-            {
-                case 1:
-                    System.out.println("News");
-                    break;
-                case 2:
-                    childOptions();
-                    break;
-                case 3:
-                    System.out.println("Parent options");
+            case 1:
+                System.out.println("News");
+                break;
+            case 2:
+                childOptions();
+                break;
+            case 3:
+                System.out.println("Parent options");
 //                    parentOptions();
-                    //Malene
-                    break;
-                case 4:
-                    adminStaffOptions();
-                    //Mads
-                    break;
-                case 5:
-                    System.out.println("Timeplan");
-//                    timetableOptions();
-                    //Mathilde
-                    break;
-                case 6:
-                    System.out.println("Venteliste");
-                    //Casper
-                    break;
-                case 7:
-                    System.out.println("Check kids");
-                    break;
-                case 8:
-                    System.out.println("Afslut");
-                    break;
-                default:
-                    System.out.println("Mærkeligt input alligevel...");
-                    break;
-            }
+                //Malene
+                break;
+            case 4:
+                adminStaffOptions();
+                //Mads
+                break;
+            case 5:
+                System.out.println("Timeplan");
+                timetableOptions();
+                //Mathilde
+                break;
+            case 6:
+                System.out.println("Venteliste");
+                //Casper
+                break;
+            case 7:
+                System.out.println("Check kids");
+                break;
+            case 8:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Mærkeligt input alligevel...");
+                break;
         }
     }
 
@@ -98,7 +96,6 @@ public class AdminOptions
         Date date = new Date();
         SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
         String currentMonthString = monthFormat.format(date);
-        viewTimetable(currentMonthString);
 
         while (true)
         {
@@ -106,15 +103,15 @@ public class AdminOptions
             int choice = scanner.nextInt();
             if (choice == 1)
             {
-                viewTimetable(currentMonthString);
+                viewTimetable(Integer.parseInt(currentMonthString));
             } else if (choice == 2)
             {
-                getEmptyTimetable(currentMonthString);
-                System.out.println("next empty month is: ");
-//                viewTimetable();
+                int emptyMonth = getEmptyTimetable(currentMonthString);
+                viewTimetable(emptyMonth);
             } else
             {
-                System.out.println("hello lmao");
+                System.out.println("Aight, ses!");
+                break;
             }
         }
     }
@@ -127,29 +124,49 @@ public class AdminOptions
         while (true)
         {
             foundEmpty = true;
-            for (int i = 0; i < Schedule.scheduleArray.size(); i++)
-            {
-                if (currentMonth.equalsIgnoreCase(Schedule.scheduleArray.get(i).getDate().split("/")[1].split("-")[0]))
-                {
+            for (Schedule schedule: Schedule.scheduleArray){
+                if (currentMonth.equalsIgnoreCase(splitMe(schedule, false))){
                     foundEmpty = false;
                     monthCount = Integer.parseInt(currentMonth);
                     monthCount++;
-                    if (monthCount < 10)
-                    {
+                    if (monthCount < 10) {
                         currentMonth = "0" + monthCount;
                     }
                     break;
                 }
             }
-            if (foundEmpty)
-            {
+            if (foundEmpty) {
                 return monthCount;
             }
         }
     }
 
-    public void viewTimetable(String monthString)
-    {
+    public void viewTimetable(int month) {
+        //Måned kommer ud uden "0" foran
+        String monthString = "0" + month;
+        String temp = "";
+
+        for (Schedule schedule: Schedule.scheduleArray)
+        {
+            String monthi = splitMe(schedule, false);
+            if (monthi.equalsIgnoreCase(monthString)){
+                Staff staff = getStaff(schedule.getId());
+                if(!temp.equalsIgnoreCase(splitMe(schedule, true))){
+                    System.out.println("Dato : " + schedule.getDate());
+                }
+                System.out.println("Medarbejder on shift: " +  staff.getFirstname());
+                System.out.println("Tid: " +  schedule.getTime());
+                temp = splitMe(schedule, true);
+            }
+        }
+    }
+
+    public String splitMe(Schedule schedule, boolean isDay){
+        if(!isDay){
+            return schedule.getDate().split("/")[1].split("-")[0];
+        }
+        return schedule.getDate().split("/")[0];
+
     }
 
     public void childOptions()
@@ -178,33 +195,29 @@ public class AdminOptions
 
     private void adminStaffOptions()
     {
-        while (true)
+        System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
         {
-            System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice)
-            {
-                case 1:
-                    System.out.println("Opret medarbejder");
-                    createStaff();
-                    break;
-                case 2:
-                    System.out.println("Aendre medarbejderinfo");
-                    editStaff();
-                    break;
-                case 3:
-                    System.out.println("Slet meadarbejder");
-                    deleteStaff();
-                    break;
-                case 4:
-                    System.out.println("Afslut");
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
+            case 1:
+                System.out.println("Opret medarbejder");
+                createStaff();
+                break;
+            case 2:
+                System.out.println("Aendre medarbejderinfo");
+                editStaff();
+                break;
+            case 3:
+                System.out.println("Slet meadarbejder");
+                deleteStaff();
+                break;
+            case 4:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
         }
-
     }
 
     private void createStaff()

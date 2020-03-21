@@ -135,7 +135,7 @@ public class Schedule
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Schedule");
+            fileWriter = new FileWriter("src/Organising/Schedule");
             writeScheduleInfo(fileWriter, scheduleArray);
             fileWriter.close();
         } catch (IOException e)

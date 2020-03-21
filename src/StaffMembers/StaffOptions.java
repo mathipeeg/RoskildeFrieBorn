@@ -32,6 +32,7 @@ public class StaffOptions
                     break;
                 case 5:
                     System.out.println("indskriv barn");
+                    // TODO: 21-03-2020 CASPERS :D
                     break;
                 case 6:
                     System.out.println("Exit");
