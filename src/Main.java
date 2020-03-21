@@ -10,6 +10,7 @@ public class Main
     {
         //Casper push!
         //Grands push!
+        //Mads push!
         Child child = new Child();
         Parent parent = new Parent();
         Staff staff = new Staff();
