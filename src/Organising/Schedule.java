@@ -94,7 +94,7 @@ public class Schedule
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Schedule"));
+            input = new Scanner(new File("src/Organising/Schedule"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();

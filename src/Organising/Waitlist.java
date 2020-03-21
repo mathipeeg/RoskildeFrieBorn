@@ -132,7 +132,7 @@ public class Waitlist
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Waitlist"));
+            input = new Scanner(new File("src/Organising/Waitlist"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
