@@ -12,6 +12,7 @@ public class Main
         //Grands push!
         //Mads push!
         //Lets merge!
+        //hej :)
         Child child = new Child();
         Parent parent = new Parent();
         Staff staff = new Staff();
