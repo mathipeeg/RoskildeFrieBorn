@@ -8,6 +8,7 @@ public class Main
 {
     public static void main(String[] args)
     {
+        //Mit første push!
         Child child = new Child();
         Parent parent = new Parent();
         Staff staff = new Staff();
