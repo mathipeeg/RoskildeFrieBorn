@@ -7,6 +7,7 @@ import Organising.Schedule;
 import Organising.Waitlist;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -71,7 +72,7 @@ public class AdminOptions
                     break;
                 case 3:
                     System.out.println("Parent options");
-//                    parentOptions();
+                    parentOptions();
                     //Malene
                     break;
                 case 4:
@@ -80,16 +81,18 @@ public class AdminOptions
                     break;
                 case 5:
                     System.out.println("Timeplan");
-//                    timetableOptions();
+                    timetableOptions();
                     //Mathilde
                     break;
                 case 6:
                     System.out.println("Venteliste");
                     waitlistOptions();
+                    //Casper
                     break;
                 case 7:
                     System.out.println("Indtjek/Udtjek barn");
                     checkedInOut();
+                    //Casper
                     break;
                 case 8:
                     System.out.println("Logger ud...");
@@ -102,35 +105,143 @@ public class AdminOptions
         }
     }
 
-    public void timetableOptions()
+    public void parentOptions()
     {
-        Date date = new Date();
-        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-        String currentMonthString = monthFormat.format(date);
 
-        while (true)
-        {
-            System.out.println("\nVil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
+        while (true){
+            System.out.println("1) Ny forældre \n2) Aendre forældre \n3) Slet forældre");
             int choice = scanner.nextInt();
-            if (choice == 1)
-            {
-                viewTimetable(currentMonthString);
-            } else if (choice == 2)
-            {
-                String emptyMonth = getEmptyTimetable(currentMonthString);
-                createShift(emptyMonth);
-                viewTimetable(emptyMonth);
-            } else
-            {
-                System.out.println("hello lmao");
+            switch (choice){
+                case 1:
+                    createParent();
+                    break;
+                case 2:
+                    editParent();
+                    break;
+                case 3:
+                    abortParent();
+                    break;
+                default:
+                    System.out.println("Mærkeligt input alligevel lmao");
+                    break;
             }
         }
     }
 
-    private void createShift(String monthString)
+
+    public void editParent()
     {
-        while (true)
+        System.out.println("Lad os ændre en forældre! \nIndtast ID på forældre, der skal ændres");
+        int id = scanner.nextInt();
+        Parent parent = getParent(id);
+        System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID \n3 Email \n4) Telefonnummer \5) Kontonummer \6) Adresse \7) Password");
+        int choice = scanner.nextInt();
+        switch (choice){
+            case 1:
+                parent.setFirstname(validateStuff("fornavn på forældre", "Hint: Store forbogstaver", nameRegex));
+                parent.parentFileWriter(Parent.parentArray);
+                System.out.println("Fornavn er ændret!");
+                break;
+            case 2:
+                parent.setLastname(validateStuff("efternavn på forældre", "Hint: Store forbogstaver", nameRegex));
+                parent.parentFileWriter(Parent.parentArray);
+                System.out.println("Efternavn er ændret!");
+                break;
+            case 3:
+                parent.setEmail(validateStuff("e-mail","Hint: eksempel@gmail.com", emailRegex));
+                parent.parentFileWriter(Parent.parentArray);
+                System.out.println("Email er ændret");
+                break;
+            case 4:
+                parent.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 91827384", numberRegex)));
+                parent.parentFileWriter(Parent.parentArray);
+                System.out.println("Telefonnummer er ændret");
+                break;
+            case 5:
+                parent.setAccount(validateStuff("konto nr.", "Hint: 12345678901234", accountRegex));
+                parent.parentFileWriter(Parent.parentArray);
+                System.out.println("Kontonummer er ændret");
+                break;
+            case 6:
+                System.out.println("Venligst indtast adresse");
+                parent.setAddress(s.nextLine());
+            default:
+                System.out.println("Mærkeligt input mand");
+                break;
+        }
+    }
+
+    public void abortParent() {
+
+        System.out.println("Indtast ID der skal slettes");
+        int id = scanner.nextInt();
+        int childId = -1;
+        for (int i = 0; i < Child.childArray.size(); i++)
         {
+            if (Child.childArray.get(i).getId() == id){
+                childId = Child.childArray.get(i).getId();
+            }
+        }
+        Child.childArray.remove(id);
+        Parent.parentArray.remove(scanner.nextInt());
+        child.childFileWriter(Child.childArray);
+        parent.parentFileWriter(Parent.parentArray);
+        System.out.println("YOU AND YOUR KID HAS BEEN ABO--- DELETED");
+    }
+
+
+    public void createParent() {
+        System.out.println("Lad os oprette dig som forældre! Woooo");
+        Parent newParent = new Parent();
+        Child newChild = new Child();
+
+        newParent.setId(Parent.parentArray.size());
+        newParent.setFirstname(validateStuff("Dit fornavn", "Hint: Store forbogstaver", nameRegex));
+        newParent.setLastname(validateStuff("Dit efternavn", "Hint: Store forbogstaver", nameRegex));
+        newParent.setEmail(validateStuff("e-mail", "Hint: eksempel@gmail.com", emailRegex));
+        newParent.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 91827384", numberRegex)));
+        newParent.setAccount(validateStuff("konto nr.", "Hint: 12345678901234", accountRegex));
+        System.out.println("Venligst indtast adresse");
+        newParent.setAddress(s.nextLine());
+        newParent.setRole("Parent");
+        Parent.parentArray.add(newParent);
+
+        newChild.setId(Child.childArray.size());
+        newChild.setBirthdate(validateStuff("fødselsdato","Hint: dd/MM-yyyy", birthdayRegex));
+        newChild.setFirstname(validateStuff("fornavn på barn", "Hint: Store forbogstaver", nameRegex));
+        newChild.setLastname(validateStuff("efternavn på barn", "Hint: Store forbogstaver", nameRegex));
+        newChild.setParentId(newParent.getId());
+        Child.childArray.add(newChild);
+
+        parent.parentFileWriter(Parent.parentArray);
+        child.childFileWriter(Child.childArray);
+        System.out.println("Du er blevet oprettet! Tillykke!");
+    }
+
+    public void timetableOptions() {
+        Date date = new Date();
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        String currentMonthString = monthFormat.format(date);
+
+        while (true) {
+            System.out.println("\nVil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
+            int choice = scanner.nextInt();
+            if (choice == 1) {
+                viewTimetable(currentMonthString);
+            } else if (choice == 2) {
+                String emptyMonth = getEmptyTimetable(currentMonthString);
+                createShift(emptyMonth);
+                viewTimetable(emptyMonth);
+            } else if (choice == 3) {
+                break;
+            } else{
+                System.out.println("Forstod ikke lige dit input...");
+            }
+        }
+    }
+
+    private void createShift(String monthString) {
+        while (true) {
             Schedule newShift = new Schedule();
             Date date = new Date();
             SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -152,23 +263,18 @@ public class AdminOptions
         }
     }
 
-    public String getEmptyTimetable(String currentMonth)
-    {
+    public String getEmptyTimetable(String currentMonth) {
         boolean foundEmpty;
         int monthCount;
 
-        while (true)
-        {
+        while (true) {
             foundEmpty = true;
-            for (int i = 0; i < Schedule.scheduleArray.size(); i++)
-            {
-                if (currentMonth.equalsIgnoreCase(Schedule.scheduleArray.get(i).getDate().split("/")[1].split("-")[0]))
-                {
+            for (int i = 0; i < Schedule.scheduleArray.size(); i++) {
+                if (currentMonth.equalsIgnoreCase(Schedule.scheduleArray.get(i).getDate().split("/")[1].split("-")[0])) {
                     foundEmpty = false;
                     monthCount = Integer.parseInt(currentMonth);
                     monthCount++;
-                    if (monthCount < 10)
-                    {
+                    if (monthCount < 10) {
                         currentMonth = "0" + monthCount;
                     }
                     break;
@@ -180,14 +286,11 @@ public class AdminOptions
         }
 
     public void viewTimetable(String month) {
-        //Måned kommer ud uden "0" foran
-        String monthString = "0" + month;
         String temp = "";
 
-        for (Schedule schedule: Schedule.scheduleArray)
-        {
+        for (Schedule schedule: Schedule.scheduleArray) {
             String monthi = splitMe(schedule, false);
-            if (monthi.equalsIgnoreCase(monthString)){
+            if (monthi.equalsIgnoreCase(month)){
                 Staff staff = getStaff(schedule.getId());
                 if(!temp.equalsIgnoreCase(splitMe(schedule, true))){
                     System.out.println("\n");
@@ -197,6 +300,11 @@ public class AdminOptions
                 System.out.println("Tid: " +  schedule.getTime());
                 temp = splitMe(schedule, true);
             }
+        }
+        System.out.println("Vil du oprette en ny vagt? \n 1) Ja 2) Nej");
+        int choice = scanner.nextInt();
+        if (choice == 1){
+            createShift(month);
         }
     }
 
@@ -584,5 +692,23 @@ public class AdminOptions
             }
         }
         return null;
+    }
+
+    public int getIndexChild(int id, ArrayList<Child> array){
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getIndexParent(int id, ArrayList<Parent> array){
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
     }
 }
