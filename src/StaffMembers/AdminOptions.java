@@ -2,6 +2,7 @@ package StaffMembers;
 
 import Members.Child;
 import Members.Parent;
+import Organising.Checked;
 import Organising.Schedule;
 import Organising.Waitlist;
 
@@ -18,6 +19,7 @@ public class AdminOptions
     Staff staff = new Staff();
     Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
+    Checked checked = new Checked();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String capLettersOnlyRegex = "^[a-zA-ZÆØÅæøå ]+$"; //kun bogstaver
@@ -53,47 +55,50 @@ public class AdminOptions
 
     public void options()
     {
-
-        System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
-                "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
-                "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
-        int choice = scanner.nextInt();
-        switch (choice)
+        while (true)
         {
-            case 1:
-                System.out.println("News");
-                break;
-            case 2:
-                childOptions();
-                break;
-            case 3:
-                System.out.println("Parent options");
+            System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
+                    "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
+                    "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
+            int choice = scanner.nextInt();
+            switch (choice)
+            {
+                case 1:
+                    System.out.println("News");
+                    break;
+                case 2:
+                    childOptions();
+                    break;
+                case 3:
+                    System.out.println("Parent options");
 //                    parentOptions();
-                //Malene
-                break;
-            case 4:
-                adminStaffOptions();
-                //Mads
-                break;
-            case 5:
-                System.out.println("Timeplan");
-                timetableOptions();
-                //Mathilde
-                break;
-            case 6:
-                System.out.println("Venteliste");
-                waitlistOptions();
-                //Casper
-                break;
-            case 7:
-                System.out.println("Check kids");
-                break;
-            case 8:
-                System.out.println("Afslut");
-                break;
-            default:
-                System.out.println("Mærkeligt input alligevel...");
-                break;
+                    //Malene
+                    break;
+                case 4:
+                    adminStaffOptions();
+                    //Mads
+                    break;
+                case 5:
+                    System.out.println("Timeplan");
+//                    timetableOptions();
+                    //Mathilde
+                    break;
+                case 6:
+                    System.out.println("Venteliste");
+                    waitlistOptions();
+                    break;
+                case 7:
+                    System.out.println("Indtjek/Udtjek barn");
+                    checkedInOut();
+                    break;
+                case 8:
+                    System.out.println("Logger ud...");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Mærkeligt input alligevel...");
+                    break;
+            }
         }
     }
 
@@ -109,16 +114,15 @@ public class AdminOptions
             int choice = scanner.nextInt();
             if (choice == 1)
             {
-                viewTimetable(Integer.parseInt(currentMonthString));
+                viewTimetable(currentMonthString);
             } else if (choice == 2)
             {
                 String emptyMonth = getEmptyTimetable(currentMonthString);
                 createShift(emptyMonth);
-                viewTimetable(Integer.parseInt(emptyMonth));
+                viewTimetable(emptyMonth);
             } else
             {
-                System.out.println("Aight, ses!");
-                break;
+                System.out.println("hello lmao");
             }
         }
     }
@@ -156,12 +160,15 @@ public class AdminOptions
         while (true)
         {
             foundEmpty = true;
-            for (Schedule schedule: Schedule.scheduleArray){
-                if (currentMonth.equalsIgnoreCase(splitMe(schedule, false))){
+            for (int i = 0; i < Schedule.scheduleArray.size(); i++)
+            {
+                if (currentMonth.equalsIgnoreCase(Schedule.scheduleArray.get(i).getDate().split("/")[1].split("-")[0]))
+                {
                     foundEmpty = false;
                     monthCount = Integer.parseInt(currentMonth);
                     monthCount++;
-                    if (monthCount < 10) {
+                    if (monthCount < 10)
+                    {
                         currentMonth = "0" + monthCount;
                     }
                     break;
@@ -172,7 +179,7 @@ public class AdminOptions
             }
         }
 
-    public void viewTimetable(int month) {
+    public void viewTimetable(String month) {
         //Måned kommer ud uden "0" foran
         String monthString = "0" + month;
         String temp = "";
@@ -193,8 +200,10 @@ public class AdminOptions
         }
     }
 
-    public String splitMe(Schedule schedule, boolean isDay){
-        if(!isDay){
+    public String splitMe(Schedule schedule, boolean isDay)
+    {
+        if (!isDay)
+        {
             return schedule.getDate().split("/")[1].split("-")[0];
         }
         return schedule.getDate().split("/")[0];
@@ -226,29 +235,33 @@ public class AdminOptions
 
     private void adminStaffOptions()
     {
-        System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
-        int choice = scanner.nextInt();
-        switch (choice)
+        while (true)
         {
-            case 1:
-                System.out.println("Opret medarbejder");
-                createStaff();
-                break;
-            case 2:
-                System.out.println("Aendre medarbejderinfo");
-                editStaff();
-                break;
-            case 3:
-                System.out.println("Slet meadarbejder");
-                deleteStaff();
-                break;
-            case 4:
-                System.out.println("Afslut");
-                break;
-            default:
-                System.out.println("Not gonna happen");
-                break;
+            System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
+            int choice = scanner.nextInt();
+            switch (choice)
+            {
+                case 1:
+                    System.out.println("Opret medarbejder");
+                    createStaff();
+                    break;
+                case 2:
+                    System.out.println("Aendre medarbejderinfo");
+                    editStaff();
+                    break;
+                case 3:
+                    System.out.println("Slet meadarbejder");
+                    deleteStaff();
+                    break;
+                case 4:
+                    System.out.println("Afslut");
+                    break;
+                default:
+                    System.out.println("Not gonna happen");
+                    break;
+            }
         }
+
     }
     private void waitlistOptions()
     {
@@ -278,6 +291,46 @@ public class AdminOptions
 
     }
 
+    public void checkedInOut()
+    {
+        System.out.println("1) Indskriv barn \n2)Udskriv barn \n3)Afslut");
+
+        int choice = scanner.nextInt();
+        switch (choice)
+        {
+            case 1:
+                System.out.println("Indskriv barn");
+                checkChild();
+                break;
+            case 2:
+                System.out.println("Udskriv barn");
+                checkOutChild();
+                break;
+            case 3:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Underligt input...");
+                break;
+        }
+    }
+    public void checkChild ()
+    {
+        System.out.println("Venligst indtast Barnets ID: ");
+        Checked checked = new Checked();
+
+        //TODO få den til at kunne promptes for ID og give det korrekte navn
+        checked.setId(Checked.checkedKidsArray.size());
+
+        Checked.checkedKidsArray.add(checked);
+        checked.checkedFileWriter(Checked.checkedKidsArray);
+        //TODO få den til at skrive "barnets navn intjekket"
+        System.out.println("Barn indtjekket");
+
+    }
+    public void checkOutChild()
+    {
+    }
     private void createStaff()
     {
         System.out.println("Du har valgt at oprette en medarbejder");
