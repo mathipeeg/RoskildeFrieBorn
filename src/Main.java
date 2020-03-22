@@ -1,5 +1,6 @@
 import Members.Child;
 import Members.Parent;
+import Organising.Checked;
 import Organising.Schedule;
 import Organising.Waitlist;
 import StaffMembers.Staff;
@@ -14,12 +15,13 @@ public class Main
         Waitlist waitlist = new Waitlist();
         Schedule schedule = new Schedule();
         Menu menu = new Menu();
-
+        Checked checked = new Checked();
         Child.childArray = child.initialiseInfo();
         Parent.parentArray = parent.initialiseInfo();
         Staff.staffArray = staff.initialiseInfo();
         Waitlist.waitlistArray = waitlist.initialiseInfo();
         Schedule.scheduleArray = schedule.initialiseInfo();
+        Checked.checkedKidsArray = checked.initialiseInfo();
 
 //        Date date = new Date();
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM-yyyy");
