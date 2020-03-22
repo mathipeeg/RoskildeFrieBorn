@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class AdminOptions
+public class Options
 {
     Scanner scanner = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
@@ -240,7 +240,7 @@ public class AdminOptions
         int childId = scanner.nextInt();
 
         Checked checked = getCheckedChild(childId);
-        String checkOut = hourFormat.format(date); // 16:21
+        String checkOut = hourFormat.format(date);
 
         int checkInHrs = splitTime(checked.getCheckIn(), true);
         int checkInMins = splitTime(checked.getCheckIn(), false);

@@ -1,7 +1,7 @@
 import Members.Child;
 import Members.Parent;
 import Members.ParentOptions;
-import StaffMembers.AdminOptions;
+import StaffMembers.Options;
 import StaffMembers.Staff;
 //import StaffMembers.StaffOptions;
 
@@ -17,27 +17,30 @@ public class Menu
     Scanner s = new Scanner(System.in);
 //    StaffOptions staffOptions = new StaffOptions();
     ParentOptions parentOptions = new ParentOptions();
-    AdminOptions adminOptions = new AdminOptions();
+    Options options = new Options();
 
     public void menu() {
         while (true) {
             System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre?");
             int role = scanner.nextInt();
             if (role == 1){
-                System.out.println("Venligst indtast dit ID.");
-                id = scanner.nextInt();
-                System.out.println("Indtast password.");
-                String pass = s.nextLine();
-                // TODO: Tjek om password og ID eksisterer
-                Staff currentStaff = adminOptions.getStaff(id);
-                options(currentStaff.getId());
+                boolean loggedIn = logIn();
+                if (loggedIn){
+                    Staff staff = options.getStaff(id);
+                    if (staff.getRole().equalsIgnoreCase("admin")) {adminOptions();}
+                    else{staffOptions(staff);}
+                }
                 break;
             } else if (role == 2){
                 System.out.println("Venligst indtast dit barns ID.");
                 id = scanner.nextInt();
-                // TODO: Tjek om id eksisterer
-                Parent parent = adminOptions.getParent(adminOptions.getChild(id).getParentId());
-                parentOptions.options(parent);
+                int checked = checkIdChild(id);
+                if (checked == 1){
+                    Parent parent = options.getParent(options.getChild(id).getParentId());
+                    parentOptions.options(parent);
+                } else{
+                    System.out.println("Beklager, dit ID virker ikke.");
+                }
                 break;
             } else{
                 System.out.println("Mærkeligt input alligevel...");
@@ -45,9 +48,44 @@ public class Menu
         }
     }
 
-    public void options(int id) {
+    private boolean logIn() {
+        boolean loggedIn = false;
+        System.out.println("Venligst indtast dit ID.");
+        id = scanner.nextInt();
+        int checkId = checkIdStaff(id);
+        if (checkId == 1){
+            System.out.println("Indtast password.");
+            String pass = s.nextLine();
+            Staff staff = options.getStaff(id);
+            if (staff.getPassword().equals(pass)) {
+                return true;
+            }
+        }
+        System.out.println("Username or pass was wrong, sorry, man.");
+        return false;
+    }
+
+    private int checkIdStaff(int id) {
+        for (Staff staff : Staff.staffArray) {
+            //Hvis id'et passer
+            if (staff.getId() == id){
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    private int checkIdChild(int id){
+        for (Child child : Child.childArray) {
+            if (child.getId() == id) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    public void adminOptions() {
         while (true) {
-            // TODO: 22-03-2020 Få StaffOptions.java til at virke
             System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
                     "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
                     "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
@@ -96,6 +134,42 @@ public class Menu
         }
     }
 
+    public void staffOptions(Staff currentStaff)
+    {
+        System.out.println("VELKOMMEN " + currentStaff.getFirstname() + " " + currentStaff.getLastname());
+        System.out.println("Vil du \n1) Opret/se nyheder \n2) Se timeplan \n3) Ændr dine informationer " +
+                "\n4) Se barns info \n5) Indskriv barn \n6) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
+        {
+            case 1:
+                System.out.println("nyheder");
+                break;
+            case 2:
+                System.out.println("Timeplan");
+                timetableOptions();
+                break;
+            case 3:
+                System.out.println("Ændr info");
+                adminStaffOptions();
+                break;
+            case 4:
+                System.out.println("Se barns info");
+                childOptions();
+                break;
+            case 5:
+                System.out.println("indskriv barn");
+                checkedInOut();
+                break;
+            case 6:
+                System.out.println("Exit");
+                break;
+            default:
+                System.out.println("lmao");
+                break;
+        }
+    }
+
     public void parentOptions() {
 
         while (true){
@@ -103,13 +177,13 @@ public class Menu
             int choice = scanner.nextInt();
             switch (choice){
                 case 1:
-                    adminOptions.createParent();
+                    options.createParent();
                     break;
                 case 2:
-                    adminOptions.editParent(-1);
+                    options.editParent(-1);
                     break;
                 case 3:
-                    adminOptions.abortParent();
+                    options.abortParent();
                     break;
                 default:
                     System.out.println("Mærkeligt input alligevel lmao");
@@ -127,11 +201,11 @@ public class Menu
             System.out.println("\nVil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
             int choice = scanner.nextInt();
             if (choice == 1) {
-                adminOptions.viewTimetable(currentMonthString);
+                options.viewTimetable(currentMonthString);
             } else if (choice == 2) {
-                String emptyMonth = adminOptions.getEmptyTimetable(currentMonthString);
-                adminOptions.createShift(emptyMonth);
-                adminOptions.viewTimetable(emptyMonth);
+                String emptyMonth = options.getEmptyTimetable(currentMonthString);
+                options.createShift(emptyMonth);
+                options.viewTimetable(emptyMonth);
             } else if (choice == 3) {
                 break;
             } else{
@@ -149,13 +223,13 @@ public class Menu
             switch (choice)
             {
                 case 1:
-                    adminOptions.createChild();
+                    options.createChild();
                     break;
                 case 2:
-                    adminOptions.editChild();
+                    options.editChild();
                     break;
                 case 3:
-                    adminOptions.abortChild();
+                    options.abortChild();
                     break;
                 default:
                     System.out.println("Mærkeligt input alligevel lmao");
@@ -171,15 +245,15 @@ public class Menu
             switch (choice) {
                 case 1:
                     System.out.println("Opret medarbejder");
-                    adminOptions.createStaff();
+                    options.createStaff();
                     break;
                 case 2:
                     System.out.println("Aendre medarbejderinfo");
-                    adminOptions.editStaff();
+                    options.editStaff();
                     break;
                 case 3:
                     System.out.println("Slet meadarbejder");
-                    adminOptions.deleteStaff();
+                    options.deleteStaff();
                     break;
                 case 4:
                     System.out.println("Afslut");
@@ -197,15 +271,15 @@ public class Menu
         switch (choice) {
             case 1:
                 System.out.println("Venteliste");
-                adminOptions.getWaitlist();
+                options.getWaitlist();
                 break;
             case 2:
                 System.out.println("Opret barn");
-                adminOptions.createChildWaitlist();
+                options.createChildWaitlist();
                 break;
             case 3:
                 System.out.println("Slet barn");
-                adminOptions.abortChildFromWaitlist();
+                options.abortChildFromWaitlist();
                 break;
             case 4:
                 System.out.println("Afslut");
@@ -225,12 +299,12 @@ public class Menu
         {
             case 1:
                 System.out.println("Indskriv barn");
-                adminOptions.checkChild();
+                options.checkChild();
                 break;
             case 2:
                 System.out.println("Udskriv barn");
                 // TODO: 22-03-2020 Lav metode, der wiper filen når dagen er omme evt brug Date?
-                adminOptions.checkOutChild();
+                options.checkOutChild();
                 break;
             case 3:
                 System.out.println("Afslut");

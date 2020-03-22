@@ -1,12 +1,12 @@
 package Members;
 
-import StaffMembers.AdminOptions;
+import StaffMembers.Options;
 import java.util.Scanner;
 
 public class ParentOptions
 {
     Scanner scanner = new Scanner(System.in);
-    AdminOptions adminOptions = new AdminOptions();
+    Options options = new Options();
 
     public void options(Parent parent)
     {
@@ -19,7 +19,7 @@ public class ParentOptions
                 break;
             } else if (choice == 2){
                 System.out.println("CHANGE YOUR INFO");
-                adminOptions.editParent(parent.getId());
+                options.editParent(parent.getId());
                 break;
             } else if (choice == 3){
                 System.out.println("See ya :)");
