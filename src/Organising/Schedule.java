@@ -159,4 +159,11 @@ public class Schedule
             }
         }
     }
+
+    public static void printSchedule(Schedule schedule){
+        System.out.println("Schedule id: " + schedule.getId());
+        System.out.println("Schedule date: " + schedule.getDate());
+        System.out.println("Schedule time: " + schedule.getTime());
+        System.out.println("Schedule hours: " + schedule.getHours());
+    }
 }

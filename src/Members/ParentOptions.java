@@ -10,6 +10,7 @@ public class ParentOptions
 
     public void options(Parent parent)
     {
+        // TODO: 22-03-2020 SMID IND I MENU
         System.out.println("Velkommen " + parent.getFirstname() + "!");
         while (true){
             System.out.println("Vil du \n1) Se nyheder \n2) Ændr din information \n3) Afslut");
