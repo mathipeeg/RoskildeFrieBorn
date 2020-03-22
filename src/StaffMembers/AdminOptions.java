@@ -6,6 +6,7 @@ import Organising.Checked;
 import Organising.Schedule;
 import Organising.Waitlist;
 
+import java.nio.charset.CharacterCodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,37 +34,31 @@ public class AdminOptions
     String idRegex = "([0-9])";
     String passRegex = "[a-zA-ZÆØÅæøå0-9!?]{8,16}";
 
-    public String upperCase(String test)
-    {
+    public String upperCase(String test) {
         Character firstLetter = test.charAt(0);
         return firstLetter.toString().toUpperCase() + test.substring(1);
     }
 
-    public String validateStuff(String attribute, String hint, String regex)
-    {
+    public String validateStuff(String attribute, String hint, String regex) {
         Scanner scanner = new Scanner(System.in);
-        while (true)
-        {
+        while (true) {
             System.out.println("Venligst indtast " + attribute);
             String k = scanner.nextLine();
-            if (k.matches(regex))
-            { //Hvis k overholder regex, then return k.
+            if (k.matches(regex)) {
+                //Hvis k overholder regex, then return k.
                 return k;
             }
             System.out.println(hint);
         }
     }
 
-    public void options()
-    {
-        while (true)
-        {
+    public void options(int id) {
+        while (true) {
             System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
                     "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
                     "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
             int choice = scanner.nextInt();
-            switch (choice)
-            {
+            switch (choice) {
                 case 1:
                     System.out.println("News");
                     break;
@@ -105,8 +100,7 @@ public class AdminOptions
         }
     }
 
-    public void parentOptions()
-    {
+    public void parentOptions() {
 
         while (true){
             System.out.println("1) Ny forældre \n2) Aendre forældre \n3) Slet forældre");
@@ -116,7 +110,7 @@ public class AdminOptions
                     createParent();
                     break;
                 case 2:
-                    editParent();
+                    editParent(-1);
                     break;
                 case 3:
                     abortParent();
@@ -129,10 +123,14 @@ public class AdminOptions
     }
 
 
-    public void editParent()
-    {
-        System.out.println("Lad os ændre en forældre! \nIndtast ID på forældre, der skal ændres");
-        int id = scanner.nextInt();
+    public void editParent(int parentId) {
+        int id = -1;
+        if (parentId == -1) {
+            System.out.println("Lad os ændre en forældre! \nIndtast ID på forældre, der skal ændres");
+            id = scanner.nextInt();
+        } else{
+            id = parentId;
+        }
         Parent parent = getParent(id);
         System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID \n3 Email \n4) Telefonnummer \5) Kontonummer \6) Adresse \7) Password");
         int choice = scanner.nextInt();
@@ -176,8 +174,7 @@ public class AdminOptions
         System.out.println("Indtast ID der skal slettes");
         int id = scanner.nextInt();
         int childId = -1;
-        for (int i = 0; i < Child.childArray.size(); i++)
-        {
+        for (int i = 0; i < Child.childArray.size(); i++) {
             if (Child.childArray.get(i).getId() == id){
                 childId = Child.childArray.get(i).getId();
             }
@@ -341,14 +338,11 @@ public class AdminOptions
         }
     }
 
-    private void adminStaffOptions()
-    {
-        while (true)
-        {
+    public void adminStaffOptions() {
+        while (true) {
             System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
             int choice = scanner.nextInt();
-            switch (choice)
-            {
+            switch (choice) {
                 case 1:
                     System.out.println("Opret medarbejder");
                     createStaff();
@@ -371,12 +365,10 @@ public class AdminOptions
         }
 
     }
-    private void waitlistOptions()
-    {
+    public void waitlistOptions() {
             System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
             int choice = scanner.nextInt();
-            switch (choice)
-            {
+            switch (choice) {
                 case 1:
                     System.out.println("Venteliste");
                     getWaitlist();
@@ -401,7 +393,7 @@ public class AdminOptions
 
     public void checkedInOut()
     {
-        System.out.println("1) Indskriv barn \n2)Udskriv barn \n3)Afslut");
+        System.out.println("1)Indskriv barn \n2)Udtjek barn \n3)Afslut");
 
         int choice = scanner.nextInt();
         switch (choice)
@@ -426,20 +418,58 @@ public class AdminOptions
     {
         System.out.println("Venligst indtast Barnets ID: ");
         Checked checked = new Checked();
+        Date date = new Date();
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-yyyy");
 
-        //TODO få den til at kunne promptes for ID og give det korrekte navn
+        int childId = scanner.nextInt();
+        Child child = getChild(childId);
         checked.setId(Checked.checkedKidsArray.size());
+        checked.setChildId(childId);
+        checked.setCheckIn(hourFormat.format(date));
+        checked.setDate(dateFormat.format(date));
+        checked.setAllHours("0");
+        checked.setCheckOut("0");
 
         Checked.checkedKidsArray.add(checked);
         checked.checkedFileWriter(Checked.checkedKidsArray);
-        //TODO få den til at skrive "barnets navn intjekket"
-        System.out.println("Barn indtjekket");
-
+        System.out.println(child.getFirstname() + " er indtjekket");
     }
+
     public void checkOutChild()
     {
+        Date date = new Date();
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+        System.out.println("Venligst indtast barnets ID");
+        int childId = scanner.nextInt();
+        Checked checked = getCheckedChild(childId);
+        String checkIn = checked.getCheckIn(); // 07:59
+        String checkOut = hourFormat.format(date); // 16:21
+        int checkInHrs = Integer.parseInt(checkIn.split(":")[0]);
+        int checkInMins = Integer.parseInt(checkIn.split(":")[1]);
+        int checkOutHrs = Integer.parseInt(checkOut.split(":")[0]);
+        int checkOutMins = Integer.parseInt(checkOut.split(":")[1]);
+        int newHour = checkOutHrs - checkInHrs;
+        int newMins;
+        if (checkInMins > checkOutMins){ newMins = checkInMins - checkOutMins; }
+        else { newMins = checkOutMins - checkInMins; }
+        checked.setCheckOut(checkOut);
+        checked.setAllHours(newHour + ":" + newMins);
+
+        checked.checkedFileWriter(Checked.checkedKidsArray);
+        System.out.println("Tjek ud er blevet oprettet.");
     }
-    private void createStaff()
+
+    public Checked getCheckedChild(int id){
+        for (Checked checked : Checked.checkedKidsArray) {
+            if (id == checked.getChildId()){
+                return checked;
+            }
+        }
+        return null;
+    }
+
+    public void createStaff()
     {
         System.out.println("Du har valgt at oprette en medarbejder");
         Staff newStaff = new Staff();
@@ -459,7 +489,7 @@ public class AdminOptions
         System.out.println("Din medarbejder er blevet oprettet, tillykke");
     }
 
-    private void deleteStaff()
+    public void deleteStaff()
     {
         System.out.println("Indtast ID på medarbejder der skal slettes");
         int id = scanner.nextInt();
@@ -469,7 +499,7 @@ public class AdminOptions
         System.out.println("Du har nu slettet en medarbejder");
     }
 
-    private void editStaff()
+    public void editStaff()
     {
         System.out.println("Du vil aendre en medarbejders oplysninger -> Indtast medarbejder ID");
         int id = scanner.nextInt();

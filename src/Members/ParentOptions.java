@@ -1,10 +1,13 @@
 package Members;
 
+import StaffMembers.AdminOptions;
 import java.util.Scanner;
 
 public class ParentOptions
 {
     Scanner scanner = new Scanner(System.in);
+    AdminOptions adminOptions = new AdminOptions();
+
     public void options(Parent parent)
     {
         System.out.println("Velkommen " + parent.getFirstname() + "!");
@@ -16,6 +19,7 @@ public class ParentOptions
                 break;
             } else if (choice == 2){
                 System.out.println("CHANGE YOUR INFO");
+                adminOptions.editParent(parent.getId());
                 break;
             } else if (choice == 3){
                 System.out.println("See ya :)");

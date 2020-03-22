@@ -10,7 +10,7 @@ public class StaffOptions
     {
         System.out.println("VELKOMMEN " + currentStaff.getFirstname() + " " + currentStaff.getLastname());
         if (currentStaff.getRole().equalsIgnoreCase("Admin")){
-            adminOptions.options();
+            adminOptions.options(0);
         } else
         {
             System.out.println("Vil du \n1) Opret/se nyheder \n2) Se timeplan \n3) Ændr dine informationer " +
@@ -23,15 +23,19 @@ public class StaffOptions
                     break;
                 case 2:
                     System.out.println("Timeplan");
+                    adminOptions.timetableOptions();
                     break;
                 case 3:
                     System.out.println("Ændr info");
+                    adminOptions.adminStaffOptions();
                     break;
                 case 4:
                     System.out.println("Se barns info");
+                    adminOptions.childOptions();
                     break;
                 case 5:
                     System.out.println("indskriv barn");
+                    adminOptions.checkedInOut();
                     // TODO: 21-03-2020 CASPERS :D
                     break;
                 case 6:

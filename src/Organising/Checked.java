@@ -11,35 +11,23 @@ public class Checked
 {
     public static ArrayList<Checked> checkedKidsArray = new ArrayList<>();
     private int id;
-    private int allHours;
+    private int childId;
+    private String allHours;
     private String date;
     private String checkIn;
     private String checkOut;
-    private String name;
-
-
 
     public Checked()
     {
     }
 
-    public Checked(int id, String date, int allHours, String checkIn, String checkOut, String name)
-    {
+    public Checked(int id, int childId, String allHours, String date, String checkIn, String checkOut) {
         this.id = id;
-        this.date = date;
+        this.childId = childId;
         this.allHours = allHours;
+        this.date = date;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.name = name;
-
-    }
-
-    public static ArrayList<Checked> getCheckedKidsArray() {
-        return getCheckedKidsArray();
-    }
-
-    public static void setCheckedKidsArray(ArrayList<Checked> checkedKidsArray) {
-        Checked.checkedKidsArray = checkedKidsArray;
     }
 
     public int getId() {
@@ -50,6 +38,14 @@ public class Checked
         this.id = id;
     }
 
+    public int getChildId() {
+        return childId;
+    }
+
+    public void setChildId(int childId) {
+        this.childId = childId;
+    }
+
     public String getDate() {
         return date;
     }
@@ -57,34 +53,30 @@ public class Checked
     public void setDate(String date) {
         this.date = date;
     }
-    public int getAllHours() {
+
+    public String getAllHours() {
         return allHours;
     }
 
-    public void setAllHours(int allHours) {
+    public void setAllHours(String allHours) {
         this.allHours = allHours;
     }
 
     public String getCheckIn() {
-        return getCheckIn();
+        return checkIn;
     }
+
     public void setCheckIn(String checkIn){
         this.checkIn = checkIn;
     }
+
     public String getCheckOut(){
         return checkOut;
     }
+
     public void setCheckOut (String checkOut){
         this.checkOut = checkOut;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getName() {
-        return getName();
-    }
-
 
     public ArrayList<Checked> initialiseInfo()
     {
@@ -98,36 +90,34 @@ public class Checked
         }
 
         int id = -1;
+        int childId = -1;
+        String allHours = "";
         String date = "";
-        int allHours = -1;
-        String name = "";
         String checkIn = "";
         String checkOut = "";
-
-
 
         while (input.hasNextLine())
         {
             String[] lineArray = input.nextLine().split(": ");
 
-            if (lineArray[0].equalsIgnoreCase("Barn ID")) id = Integer.parseInt(lineArray[1]);
-            if (lineArray[0].equalsIgnoreCase("Navn")) name = lineArray[1];
+            if (lineArray[0].equalsIgnoreCase("Checked ID")) id = Integer.parseInt(lineArray[1]);
+            if (lineArray[0].equalsIgnoreCase("Barn ID")) childId = Integer.parseInt(lineArray[1]);
             if (lineArray[0].equalsIgnoreCase("Indtjek")) checkIn = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("Udtjek")) checkOut = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("Dato")) date = lineArray[1];
-            if (lineArray[0].equalsIgnoreCase("Samlet tid")) allHours = Integer.parseInt(lineArray[1]);
+            if (lineArray[0].equalsIgnoreCase("Samlet tid")) allHours = lineArray[1];
 
 
-            if (id != -1 && !date.equalsIgnoreCase("") && allHours != -1
+            if (id != -1 && !date.equalsIgnoreCase("") && childId != -1 && !allHours.equalsIgnoreCase("")
                     && !checkIn.equalsIgnoreCase("")
-                    && !checkOut.equalsIgnoreCase("")
-                    && !name.equalsIgnoreCase("")){
-                Checked checked = new Checked(id, date, allHours, name, checkIn, checkOut);
+                    && !checkOut.equalsIgnoreCase("")){
+
+                Checked checked = new Checked(id, childId, allHours, date, checkIn, checkOut);
                 checkedKidsArray.add(checked);
                 id = -1;
+                childId = -1;
                 date = "";
-                allHours = -1;
-                name = "";
+                allHours = "";
                 checkIn = "";
                 checkOut = "";
 
@@ -141,7 +131,7 @@ public class Checked
         try
         {
             fileWriter = new FileWriter("src/Organising/CheckedKids");
-            writeCheckedInfo(fileWriter, Checked.checkedKidsArray);
+            writeCheckedInfo(fileWriter, checkedKidsArray);
             fileWriter.close();
         } catch (IOException e)
         {
@@ -152,8 +142,8 @@ public class Checked
         for (int i = 0; i < checkedKidsArray.size(); i++){
             try
             {
+                fileWriter.write("Checked ID: " + checkedKidsArray.get(i).getId() + "\n");
                 fileWriter.write("Barn ID: " + checkedKidsArray.get(i).getId() + "\n");
-                fileWriter.write("Navn: " + checkedKidsArray.get(i).getName() + "\n");
                 fileWriter.write("Indtjek: " + checkedKidsArray.get(i).getCheckIn() + "\n");
                 fileWriter.write("Udtjek: " + checkedKidsArray.get(i).getCheckOut() + "\n");
                 fileWriter.write("Dato: " + checkedKidsArray.get(i).getDate() + "\n");
