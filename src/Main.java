@@ -4,6 +4,9 @@ import Organising.Schedule;
 import Organising.Waitlist;
 import StaffMembers.Staff;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Main
 {
     public static void main(String[] args)
@@ -22,10 +25,8 @@ public class Main
         Schedule.scheduleArray = schedule.initialiseInfo();
 
 //        Date date = new Date();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM-yyyy");
-//        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-//        System.out.println("date: " + simpleDateFormat.format(date));
-//        System.out.println("Month? " + monthFormat.format(date));
+//        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+//        System.out.println("hour: " + hourFormat.format(date));
         menu.menu();
     }
 }

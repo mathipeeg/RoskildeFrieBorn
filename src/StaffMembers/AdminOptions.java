@@ -16,13 +16,16 @@ public class AdminOptions
     Parent parent = new Parent();
     Child child = new Child();
     Staff staff = new Staff();
+    Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String capLettersOnlyRegex = "^[a-zA-ZÆØÅæøå ]+$"; //kun bogstaver
+    String shiftTimeRegex = "(1[0-9]|[1-9]|2[0-4])-(1[0-9]|[1-9]|2[0-4])"; // 7-12
     String nameRegex = "[A-ZÆØÅ][a-zæøå-]{0,25}"; // stort forbogs. og bindestreg
     String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"; //Skal starte med bogstav, indeholde @, og slutte med "." og 2 - 6 bogstaver
     String numberRegex = "([0-9]{8})";
+    String dateRegex = "([0-9]{2})";
     String accountRegex = "([0-9]{14})";
     String idRegex = "([0-9])";
     String passRegex = "[a-zA-ZÆØÅæøå0-9!?]{8,16}";
@@ -102,15 +105,16 @@ public class AdminOptions
 
         while (true)
         {
-            System.out.println("Do you wanna \n1) Se timeplan for denne måned \n2) Se timeplan for næste tomme måned \n3) Afslut");
+            System.out.println("\nVil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
             int choice = scanner.nextInt();
             if (choice == 1)
             {
                 viewTimetable(Integer.parseInt(currentMonthString));
             } else if (choice == 2)
             {
-                int emptyMonth = getEmptyTimetable(currentMonthString);
-                viewTimetable(emptyMonth);
+                String emptyMonth = getEmptyTimetable(currentMonthString);
+                createShift(emptyMonth);
+                viewTimetable(Integer.parseInt(emptyMonth));
             } else
             {
                 System.out.println("Aight, ses!");
@@ -119,10 +123,35 @@ public class AdminOptions
         }
     }
 
-    public int getEmptyTimetable(String currentMonth)
+    private void createShift(String monthString)
+    {
+        while (true)
+        {
+            Schedule newShift = new Schedule();
+            Date date = new Date();
+            SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+
+            newShift.setId(Integer.parseInt(validateStuff("medarbejderens ID", "Hint: kun tal", idRegex)));
+            String day = validateStuff("dato for vagten", "Hint: dd", dateRegex);
+            String year = yearFormat.format(date);
+            newShift.setDate(day + "/" + monthString + "-" + year);
+            newShift.setTime(validateStuff("tidspunkt for vagten", "Ex. 7-12, 7-17", shiftTimeRegex));
+            newShift.setHours(Integer.parseInt(newShift.getTime().split("-")[1]) - Integer.parseInt(newShift.getTime().split("-")[0]));
+            newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
+            Schedule.scheduleArray.add(newShift);
+            schedule.scheduleFileWriter(Schedule.scheduleArray);
+            System.out.println("Vagten er oprettet. Vil du oprette flere vagter? \n1) Ja 2) Nej");
+            int choice = scanner.nextInt();
+            if (choice == 2){
+                break;
+            }
+        }
+    }
+
+    public String getEmptyTimetable(String currentMonth)
     {
         boolean foundEmpty;
-        int monthCount = 0;
+        int monthCount;
 
         while (true)
         {
@@ -138,11 +167,10 @@ public class AdminOptions
                     break;
                 }
             }
-            if (foundEmpty) {
-                return monthCount;
+            if (foundEmpty)
+                return currentMonth;
             }
         }
-    }
 
     public void viewTimetable(int month) {
         //Måned kommer ud uden "0" foran
@@ -155,9 +183,10 @@ public class AdminOptions
             if (monthi.equalsIgnoreCase(monthString)){
                 Staff staff = getStaff(schedule.getId());
                 if(!temp.equalsIgnoreCase(splitMe(schedule, true))){
+                    System.out.println("\n");
                     System.out.println("Dato : " + schedule.getDate());
                 }
-                System.out.println("Medarbejder on shift: " +  staff.getFirstname());
+                System.out.println(staff.getFirstname());
                 System.out.println("Tid: " +  schedule.getTime());
                 temp = splitMe(schedule, true);
             }
@@ -169,7 +198,6 @@ public class AdminOptions
             return schedule.getDate().split("/")[1].split("-")[0];
         }
         return schedule.getDate().split("/")[0];
-
     }
 
     public void childOptions()
@@ -450,6 +478,37 @@ public class AdminOptions
 
         System.out.println("Barn er blevet oprettet på venteliste!");
     }
+
+    public void getWaitlist()
+    {
+        for (int i = 0; i < Waitlist.waitlistArray.size(); i++)
+        {
+            System.out.println("Barnets ID: " + Waitlist.waitlistArray.get(i).getId());
+            System.out.println("Barnets navn: " + Waitlist.waitlistArray.get(i).getChildFirstname() +
+                    " " + Waitlist.waitlistArray.get(i).getChildLastname());
+            System.out.println("Foedsels dato (DD/MM-YYYY): " + Waitlist.waitlistArray.get(i).getBirthdate());
+            System.out.println("-------------------------------------------------");
+            System.out.println("Foraeldre navn: " + Waitlist.waitlistArray.get(i).getParentFirstname() +
+                    " " + Waitlist.waitlistArray.get(i).getParentLastname());
+            System.out.println(" Tlf.: " + Waitlist.waitlistArray.get(i).getPhone() +
+                    " Adresse: " + Waitlist.waitlistArray.get(i).getAddress());
+            System.out.println("E-mail: " + Waitlist.waitlistArray.get(i).getEmail());
+            System.out.println();
+        }
+    }
+
+    public Parent getParent(int parentId)
+    {
+        for (int i = 0; i < Parent.parentArray.size(); i++)
+        {
+            if (Parent.parentArray.get(i).getId() == parentId)
+            {
+                return Parent.parentArray.get(i);
+            }
+        }
+        return null;
+    }
+
     public Child getChild(int id)
     {
         for (int i = 0; i < Child.childArray.size(); i++)
@@ -469,35 +528,6 @@ public class AdminOptions
             if (Staff.staffArray.get(i).getId() == id)
             {
                 return Staff.staffArray.get(i);
-            }
-        }
-        return null;
-    }
-    public void getWaitlist()
-    {
-        for (int i = 0; i < Waitlist.waitlistArray.size(); i++)
-        {
-            System.out.println("Barnets ID: " + Waitlist.waitlistArray.get(i).getId());
-            System.out.println("Barnets navn: " + Waitlist.waitlistArray.get(i).getChildFirstname() +
-                    " " + Waitlist.waitlistArray.get(i).getChildLastname());
-            System.out.println("Foedsels dato (DD/MM-YYYY): " + Waitlist.waitlistArray.get(i).getBirthdate());
-            System.out.println("-------------------------------------------------");
-            System.out.println("Foraeldre navn: " + Waitlist.waitlistArray.get(i).getParentFirstname() +
-                    " " + Waitlist.waitlistArray.get(i).getParentLastname());
-            System.out.println(" Tlf.: " + Waitlist.waitlistArray.get(i).getPhone() +
-                    "Adresse: " + Waitlist.waitlistArray.get(i).getAddress());
-            System.out.println("E-mail: " + Waitlist.waitlistArray.get(i).getEmail());
-            System.out.println();
-        }
-    }
-
-    public Parent getParent(int parentId)
-    {
-        for (int i = 0; i < Parent.parentArray.size(); i++)
-        {
-            if (Parent.parentArray.get(i).getId() == parentId)
-            {
-                return Parent.parentArray.get(i);
             }
         }
         return null;

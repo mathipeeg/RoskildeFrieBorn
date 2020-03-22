@@ -152,7 +152,7 @@ public class Schedule
                 fileWriter.write("Dato: " + scheduleArray.get(i).getDate() + "\n");
                 fileWriter.write("Tid: " + scheduleArray.get(i).getTime() + "\n");
                 fileWriter.write("Timer: " + scheduleArray.get(i).getHours() + "\n");
-                fileWriter.write("Pause (min): " + scheduleArray.get(i).getBreakTime() + "\n");
+                fileWriter.write("Pause (min): " + scheduleArray.get(i).getBreakTime() + "\n\n");
             } catch (IOException e)
             {
                 e.printStackTrace();
