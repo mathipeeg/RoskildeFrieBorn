@@ -21,10 +21,8 @@ public class AdminOptions
     Staff staff = new Staff();
     Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
-    Checked checked = new Checked();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
-    String capLettersOnlyRegex = "^[a-zA-ZÆØÅæøå ]+$"; //kun bogstaver
     String shiftTimeRegex = "(1[0-9]|[1-9]|2[0-4])-(1[0-9]|[1-9]|2[0-4])"; // 7-12
     String nameRegex = "[A-ZÆØÅ][a-zæøå-]{0,25}"; // stort forbogs. og bindestreg
     String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"; //Skal starte med bogstav, indeholde @, og slutte med "." og 2 - 6 bogstaver
@@ -33,11 +31,6 @@ public class AdminOptions
     String accountRegex = "([0-9]{14})";
     String idRegex = "([0-9])";
     String passRegex = "[a-zA-ZÆØÅæøå0-9!?]{8,16}";
-
-    public String upperCase(String test) {
-        Character firstLetter = test.charAt(0);
-        return firstLetter.toString().toUpperCase() + test.substring(1);
-    }
 
     public String validateStuff(String attribute, String hint, String regex) {
         Scanner scanner = new Scanner(System.in);
@@ -51,77 +44,6 @@ public class AdminOptions
             System.out.println(hint);
         }
     }
-
-    public void options(int id) {
-        while (true) {
-            System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
-                    "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
-                    "\n6) Venteliste \n7) Indskriv boern \n8) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    System.out.println("News");
-                    break;
-                case 2:
-                    childOptions();
-                    break;
-                case 3:
-                    System.out.println("Parent options");
-                    parentOptions();
-                    //Malene
-                    break;
-                case 4:
-                    adminStaffOptions();
-                    //Mads
-                    break;
-                case 5:
-                    System.out.println("Timeplan");
-                    timetableOptions();
-                    //Mathilde
-                    break;
-                case 6:
-                    System.out.println("Venteliste");
-                    waitlistOptions();
-                    //Casper
-                    break;
-                case 7:
-                    System.out.println("Indtjek/Udtjek barn");
-                    checkedInOut();
-                    //Casper
-                    break;
-                case 8:
-                    System.out.println("Logger ud...");
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Mærkeligt input alligevel...");
-                    break;
-            }
-        }
-    }
-
-    public void parentOptions() {
-
-        while (true){
-            System.out.println("1) Ny forældre \n2) Aendre forældre \n3) Slet forældre");
-            int choice = scanner.nextInt();
-            switch (choice){
-                case 1:
-                    createParent();
-                    break;
-                case 2:
-                    editParent(-1);
-                    break;
-                case 3:
-                    abortParent();
-                    break;
-                default:
-                    System.out.println("Mærkeligt input alligevel lmao");
-                    break;
-            }
-        }
-    }
-
 
     public void editParent(int parentId) {
         int id = -1;
@@ -172,20 +94,15 @@ public class AdminOptions
     public void abortParent() {
 
         System.out.println("Indtast ID der skal slettes");
-        int id = scanner.nextInt();
-        int childId = -1;
-        for (int i = 0; i < Child.childArray.size(); i++) {
-            if (Child.childArray.get(i).getId() == id){
-                childId = Child.childArray.get(i).getId();
-            }
-        }
-        Child.childArray.remove(id);
-        Parent.parentArray.remove(scanner.nextInt());
+        int parentId = scanner.nextInt();
+        int parenti = getIndexParent(parentId, Parent.parentArray);
+        Child.childArray.removeIf(child -> child.getParentId() == parentId);
+        Parent.parentArray.remove(parenti);
+
         child.childFileWriter(Child.childArray);
         parent.parentFileWriter(Parent.parentArray);
         System.out.println("YOU AND YOUR KID HAS BEEN ABO--- DELETED");
     }
-
 
     public void createParent() {
         System.out.println("Lad os oprette dig som forældre! Woooo");
@@ -215,30 +132,9 @@ public class AdminOptions
         System.out.println("Du er blevet oprettet! Tillykke!");
     }
 
-    public void timetableOptions() {
-        Date date = new Date();
-        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-        String currentMonthString = monthFormat.format(date);
-
+    public void createShift(String monthString) {
         while (true) {
-            System.out.println("\nVil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
-            int choice = scanner.nextInt();
-            if (choice == 1) {
-                viewTimetable(currentMonthString);
-            } else if (choice == 2) {
-                String emptyMonth = getEmptyTimetable(currentMonthString);
-                createShift(emptyMonth);
-                viewTimetable(emptyMonth);
-            } else if (choice == 3) {
-                break;
-            } else{
-                System.out.println("Forstod ikke lige dit input...");
-            }
-        }
-    }
-
-    private void createShift(String monthString) {
-        while (true) {
+            // TODO: 22-03-2020 Opret mere end én vagt på en gang?
             Schedule newShift = new Schedule();
             Date date = new Date();
             SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -314,106 +210,6 @@ public class AdminOptions
         return schedule.getDate().split("/")[0];
     }
 
-    public void childOptions()
-    {
-        while (true)
-        {
-            System.out.println("1) Nyt barn \n2) Aendre barn \n3) Slet barn");
-            int choice = scanner.nextInt();
-            switch (choice)
-            {
-                case 1:
-                    createChild();
-                    break;
-                case 2:
-                    editChild();
-                    break;
-                case 3:
-                    abortChild();
-                    break;
-                default:
-                    System.out.println("Mærkeligt input alligevel lmao");
-                    break;
-            }
-        }
-    }
-
-    public void adminStaffOptions() {
-        while (true) {
-            System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    System.out.println("Opret medarbejder");
-                    createStaff();
-                    break;
-                case 2:
-                    System.out.println("Aendre medarbejderinfo");
-                    editStaff();
-                    break;
-                case 3:
-                    System.out.println("Slet meadarbejder");
-                    deleteStaff();
-                    break;
-                case 4:
-                    System.out.println("Afslut");
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
-        }
-
-    }
-    public void waitlistOptions() {
-            System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    System.out.println("Venteliste");
-                    getWaitlist();
-                    break;
-                case 2:
-                    System.out.println("Opret barn");
-                    createChildWaitlist();
-                    break;
-                case 3:
-                    System.out.println("Slet barn");
-                    abortChildFromWaitlist();
-                    break;
-                case 4:
-                    System.out.println("Afslut");
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
-
-    }
-
-    public void checkedInOut()
-    {
-        System.out.println("1)Indskriv barn \n2)Udtjek barn \n3)Afslut");
-
-        int choice = scanner.nextInt();
-        switch (choice)
-        {
-            case 1:
-                System.out.println("Indskriv barn");
-                checkChild();
-                break;
-            case 2:
-                System.out.println("Udskriv barn");
-                checkOutChild();
-                break;
-            case 3:
-                System.out.println("Afslut");
-                break;
-            default:
-                System.out.println("Underligt input...");
-                break;
-        }
-    }
     public void checkChild ()
     {
         System.out.println("Venligst indtast Barnets ID: ");
@@ -442,13 +238,14 @@ public class AdminOptions
         SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
         System.out.println("Venligst indtast barnets ID");
         int childId = scanner.nextInt();
+
         Checked checked = getCheckedChild(childId);
-        String checkIn = checked.getCheckIn(); // 07:59
         String checkOut = hourFormat.format(date); // 16:21
-        int checkInHrs = Integer.parseInt(checkIn.split(":")[0]);
-        int checkInMins = Integer.parseInt(checkIn.split(":")[1]);
-        int checkOutHrs = Integer.parseInt(checkOut.split(":")[0]);
-        int checkOutMins = Integer.parseInt(checkOut.split(":")[1]);
+
+        int checkInHrs = splitTime(checked.getCheckIn(), true);
+        int checkInMins = splitTime(checked.getCheckIn(), false);
+        int checkOutHrs = splitTime(checkOut, true);
+        int checkOutMins = splitTime(checkOut, false);
         int newHour = checkOutHrs - checkInHrs;
         int newMins;
         if (checkInMins > checkOutMins){ newMins = checkInMins - checkOutMins; }
@@ -467,6 +264,13 @@ public class AdminOptions
             }
         }
         return null;
+    }
+
+    public int splitTime(String time, boolean hour){
+        if (hour){
+            return Integer.parseInt(time.split(":")[0]);
+        }
+        return Integer.parseInt(time.split(":")[1]);
     }
 
     public void createStaff()
@@ -493,8 +297,8 @@ public class AdminOptions
     {
         System.out.println("Indtast ID på medarbejder der skal slettes");
         int id = scanner.nextInt();
-
-        Staff.staffArray.remove(id);
+        int staffIndex = getIndexStaff(id, Staff.staffArray);
+        Staff.staffArray.remove(staffIndex);
         staff.staffFileWriter(Staff.staffArray);
         System.out.println("Du har nu slettet en medarbejder");
     }
@@ -611,7 +415,8 @@ public class AdminOptions
                 childId = Waitlist.waitlistArray.get(i).getId();
             }
         }
-        Waitlist.waitlistArray.remove(childId);
+        int childIndex = getIndexChild(childId, Child.childArray);
+        Waitlist.waitlistArray.remove(childIndex);
         waitlist.waitlistFileWriter(Waitlist.waitlistArray);
         System.out.println("THE KID HAS BEEN ABO--- DELETED");
     }
@@ -734,6 +539,15 @@ public class AdminOptions
     }
 
     public int getIndexParent(int id, ArrayList<Parent> array){
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getIndexStaff(int id, ArrayList<Staff> array){
         for (int i = 0; i < array.size(); i++) {
             if (array.get(i).getId() == id){
                 return i;
