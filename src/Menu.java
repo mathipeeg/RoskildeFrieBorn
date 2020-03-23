@@ -168,6 +168,9 @@ public class Menu
         switch (choice)
         {
             // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
+            // TODO: Dato, publisher
+            // TODO: stilling check
+
             case 1:
                 System.out.println("Se nyheder");
                 options.seeNews();
@@ -205,6 +208,7 @@ public class Menu
         {
             case 1:
                 System.out.println("nyheder");
+                // TODO: Nyheder
                 break;
             case 2:
                 System.out.println("Timeplan");
