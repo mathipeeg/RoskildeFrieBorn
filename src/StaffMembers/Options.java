@@ -2,10 +2,7 @@ package StaffMembers;
 
 import Members.Child;
 import Members.Parent;
-import Organising.Checked;
-import Organising.GetMethods;
-import Organising.Schedule;
-import Organising.Waitlist;
+import Organising.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,6 +19,7 @@ public class Options
     Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
     GetMethods get = new GetMethods();
+    News news = new News();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String shiftTimeRegex = "(1[0-9]|[1-9]|2[0-4])-(1[0-9]|[1-9]|2[0-4])"; // 7-12
@@ -510,5 +508,69 @@ public class Options
             System.out.println("E-mail: " + Waitlist.waitlistArray.get(i).getEmail());
             System.out.println();
         }
+    }
+
+    public void createNews()
+    {
+        System.out.println("Du har valgt at oprette nye nyheder");
+        News newNews = new News();
+
+        newNews.setId(News.newsArray.size());
+        System.out.println("Venlig indtast en overskrift");
+        newNews.setHeadLine(s.nextLine());
+        System.out.println("Skriv noget indhold");
+        newNews.setBody(s.nextLine());
+
+
+        News.newsArray.add(newNews);
+        news.newsFileWriter(News.newsArray);
+        System.out.println("Dine nyheder er lavet, TILLYKKE!");
+
+
+    }
+
+    public void seeNews()
+    {
+        for (int i = 0; i < News.newsArray.size(); i++)
+        {
+            System.out.println("Du har valgt at se nyheder");
+            System.out.println("Virker det ?" + News.newsArray.get(i).getHeadLine());
+            System.out.println(News.newsArray.get(i).getBody());
+        }
+    }
+
+    public void editNews()
+    {
+        System.out.println("Du har valgt at ændre nogle nyheder \nIndtast ID på nyheden, der skal ændres");
+        int id = scanner.nextInt();
+        News news = get.getNews(id);
+        System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
+        {
+            case 1:
+                System.out.println("Ændre overskift");
+                news.setHeadLine(s.nextLine());
+                break;
+            case 2:
+                System.out.println("Ændre indhold");
+                news.setBody(s.nextLine());
+                break;
+            case 3:
+                System.out.println("Afslut");
+                break;
+        }
+        news.newsFileWriter(News.newsArray);
+    }
+
+    public void deleteNews()
+    {
+        System.out.println("Indtast ID på nyhed der skal slettes");
+        int id = scanner.nextInt();
+        int newsIndex = get.getIndexNews(id, News.newsArray);
+        News.newsArray.remove(newsIndex);
+        news.newsFileWriter(News.newsArray);
+        System.out.println("Nyhederne er nu slettet");
+
     }
 }
