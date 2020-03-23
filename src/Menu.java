@@ -15,7 +15,6 @@ public class Menu
     public static int id = -1;
     Scanner scanner = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
-    ParentOptions parentOptions = new ParentOptions();
     Options options = new Options();
     GetMethods get = new GetMethods();
 
@@ -37,7 +36,7 @@ public class Menu
                 int checked = checkIdChild(id);
                 if (checked == 1){
                     Parent parent = get.getParent(get.getChild(id).getParentId());
-                    parentOptions.options(parent);
+                    options(parent);
                 } else{
                     System.out.println("Beklager, dit ID eksisterer ikke.");
                 }
@@ -153,6 +152,29 @@ public class Menu
                 default:
                     System.out.println("Mærkeligt input alligevel...");
                     break;
+            }
+        }
+    }
+
+    public void options(Parent parent)
+    {
+        System.out.println("Velkommen " + parent.getFirstname() + "!");
+        while (true){
+            System.out.println("Vil du \n1) Se nyheder \n2) Ændr din information \n3) Afslut");
+            int choice = scanner.nextInt();
+            if (choice == 1){
+                System.out.println("NEWS");
+                // TODO: nyheder her ^
+                break;
+            } else if (choice == 2){
+                System.out.println("CHANGE YOUR INFO");
+                options.editParent(parent.getId());
+                break;
+            } else if (choice == 3){
+                System.out.println("See ya :)");
+                break;
+            } else{
+                System.out.println("Mærkeligt input alligevel...");
             }
         }
     }
