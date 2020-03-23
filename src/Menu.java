@@ -3,6 +3,7 @@ import Members.Parent;
 import Members.ParentOptions;
 import StaffMembers.Options;
 import StaffMembers.Staff;
+import org.w3c.dom.ls.LSOutput;
 //import StaffMembers.StaffOptions;
 
 import java.text.SimpleDateFormat;
@@ -133,6 +134,9 @@ public class Menu
             }
         }
     }
+    public void newsOptions(){
+        System.out.println("Velkommen på nyhedssiden");
+        //indlæs og switch funkktion mellem læse, redigere og opret
 
     public void staffOptions(Staff currentStaff)
     {

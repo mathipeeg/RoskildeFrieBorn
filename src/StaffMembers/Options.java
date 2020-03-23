@@ -493,7 +493,83 @@ public class Options
         }
     }
 
-    public Parent getParent(int parentId)
+    /*public void News()
+    {
+        public void createNews()
+        {
+            String header = scanner.next();
+            System.out.println("Du e rnu klar til at oprette nyheder");
+            News newNews = new News();
+
+            newNews.setHeader(s.nextLine());
+
+
+            System.out.println("Overskriften er " + setHeader);
+        }
+
+        public void deleteNews()
+        {
+            System.out.println("Indtast ID på medarbejder der skal slettes");
+            int id = scanner.nextInt();
+            int staffIndex = getIndexStaff(id, Staff.staffArray);
+            Staff.staffArray.remove(staffIndex);
+            staff.staffFileWriter(Staff.staffArray);
+            System.out.println("Du har nu slettet en medarbejder");
+        }
+
+        public void editStaff()
+        {
+            System.out.println("Du vil aendre en medarbejders oplysninger -> Indtast medarbejder ID");
+            int id = scanner.nextInt();
+            Staff staff = getStaff(id);
+            System.out.println("Her er dine valgmuligheder \n1) Fornavn \n2) Efternavn \n3) Email \n4) " +
+                    "Telefon \n5) Adresse \n6) Stilling \n7) Kodeord");
+            int choice = scanner.nextInt();
+            switch (choice)
+            {
+                case 1:
+                    staff.setFirstname(validateStuff("fornavn", "Hint: Store forbogstaver", nameRegex));
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Fornavn er aendret \n");
+                    break;
+                case 2:
+                    staff.setLastname(validateStuff("efternavn", "Hint: Store forbogstaver", nameRegex));
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Efternavn er aendret \n");
+                    break;
+                case 3:
+                    staff.setEmail(validateStuff("email", "Hint: abc@hotmail.com", emailRegex));
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Email er aendret \n");
+                    break;
+                case 4:
+                    staff.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 12345678", numberRegex)));
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Telefonnummer er aendret \n");
+                    break;
+                case 5:
+                    staff.setAddress("Venligst indtast adresse" + s.nextLine());
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Adressen er aendret \n");
+                    break;
+                case 6:
+                    staff.setRole("Venligst indtast stilling" + s.nextLine());
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Stilling er aendret \n");
+                    break;
+                case 7:
+                    staff.setPassword(validateStuff("password", "Hint: Stort, småt, tal og tegn", passRegex));
+                    staff.staffFileWriter(Staff.staffArray);
+                    System.out.println("Kodeord er aendret \n");
+                    break;
+                default:
+                    System.out.println("Aint gonna happen");
+                    break;
+            }
+        }*/
+
+
+        public Parent getParent(int parentId)
     {
         for (int i = 0; i < Parent.parentArray.size(); i++)
         {
