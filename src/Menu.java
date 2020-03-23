@@ -1,7 +1,7 @@
 import Members.Child;
 import Members.Parent;
-import Members.ParentOptions;
 import Organising.GetMethods;
+import Organising.News;
 import StaffMembers.Options;
 import StaffMembers.Staff;
 
@@ -17,6 +17,7 @@ public class Menu
     Scanner s = new Scanner(System.in);
     Options options = new Options();
     GetMethods get = new GetMethods();
+
 
     public void menu() {
         while (true) {
@@ -115,6 +116,7 @@ public class Menu
             switch (choice) {
                 case 1:
                     System.out.println("News");
+                    newsOptions();
                     // TODO: 22-03-2020 Eventuelle news
                     //Malene og Mads
                     break;
@@ -179,6 +181,42 @@ public class Menu
         }
     }
 
+    private void newsOptions()
+    {
+        System.out.println("Vil du \n1) Se nyheder \n2) Opret nyhder \n3) Ændre nyheder \n4) " +
+                "Slet nyheder \n5) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
+        {
+            // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
+            // TODO: Dato, publisher
+            // TODO: stilling check
+
+            case 1:
+                System.out.println("Se nyheder");
+                options.seeNews();
+                break;
+            case 2:
+                System.out.println("Opret nyheder");
+                options.createNews();
+                break;
+            case 3:
+                System.out.println("ændre nyheder");
+                options.editNews();
+                break;
+            case 4:
+                System.out.println("Slet nyheder");
+                options.deleteNews();
+                break;
+            case 5:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
+        }
+    }
+
     public void staffOptions(Staff currentStaff)
     {
         System.out.println("VELKOMMEN " + currentStaff.getFirstname() + " " + currentStaff.getLastname());
@@ -189,6 +227,7 @@ public class Menu
         {
             case 1:
                 System.out.println("nyheder");
+                // TODO: Nyheder
                 break;
             case 2:
                 System.out.println("Timeplan");
