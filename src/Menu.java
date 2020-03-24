@@ -5,6 +5,7 @@ import StaffMembers.AdminOptions;
 import StaffMembers.Staff;
 //import StaffMembers.StaffOptions;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -19,7 +20,7 @@ public class Menu
     ParentOptions parentOptions = new ParentOptions();
     AdminOptions adminOptions = new AdminOptions();
 
-    public void menu() {
+    public void menu() throws ParseException {
         while (true) {
             System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre?");
             int role = scanner.nextInt();
@@ -45,7 +46,7 @@ public class Menu
         }
     }
 
-    public void options(int id) {
+    public void options(int id) throws ParseException {
         while (true) {
             // TODO: 22-03-2020 Få StaffOptions.java til at virke
             System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
@@ -78,12 +79,10 @@ public class Menu
                 case 6:
                     System.out.println("Venteliste");
                     waitlistOptions();
-                    //Casper
                     break;
                 case 7:
                     System.out.println("Indtjek/Udtjek barn");
                     checkedInOut();
-                    //Casper
                     break;
                 case 8:
                     System.out.println("Logger ud...");
@@ -216,8 +215,7 @@ public class Menu
         }
     }
 
-    public void checkedInOut()
-    {
+    public void checkedInOut() throws ParseException {
         System.out.println("1)Indskriv barn \n2)Udtjek barn \n3)Afslut");
 
         int choice = scanner.nextInt();
@@ -229,7 +227,6 @@ public class Menu
                 break;
             case 2:
                 System.out.println("Udskriv barn");
-                // TODO: 22-03-2020 Lav metode, der wiper filen når dagen er omme evt brug Date?
                 adminOptions.checkOutChild();
                 break;
             case 3:

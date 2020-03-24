@@ -7,6 +7,7 @@ import Organising.Schedule;
 import Organising.Waitlist;
 
 import java.nio.charset.CharacterCodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -240,7 +241,7 @@ public class AdminOptions
         int childId = scanner.nextInt();
 
         Checked checked = getCheckedChild(childId);
-        String checkOut = hourFormat.format(date); // 16:21
+        String checkOut = hourFormat.format(date);
 
         int checkInHrs = splitTime(checked.getCheckIn(), true);
         int checkInMins = splitTime(checked.getCheckIn(), false);
@@ -254,7 +255,24 @@ public class AdminOptions
         checked.setAllHours(newHour + ":" + newMins);
 
         checked.checkedFileWriter(Checked.checkedKidsArray);
-        System.out.println("Tjek ud er blevet oprettet.");
+        System.out.println("Barn udtjekket.");
+    }
+    public void wipeArray () throws ParseException {
+        Date date = new Date ();
+        Checked checked = new Checked();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM-yyyy");
+        String currentDate = simpleDateFormat.format(date);
+
+        Date current = new SimpleDateFormat("dd/mm-yyyy").parse(currentDate);
+        Date former = new SimpleDateFormat("dd/mm-yyyy").parse(Checked.checkedKidsArray.get(0).getDate());
+        if(former.before(current))
+        {
+        Checked.checkedKidsArray.clear();
+        checked.checkedFileWriter(Checked.checkedKidsArray);
+        }
+
+
     }
 
     public Checked getCheckedChild(int id){
