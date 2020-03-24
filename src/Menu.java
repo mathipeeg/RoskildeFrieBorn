@@ -323,29 +323,28 @@ public class Menu
     }
 
     public void adminStaffOptions() {
-        while (true) {
-            System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    System.out.println("Opret medarbejder");
-                    options.createStaff();
-                    break;
-                case 2:
-                    System.out.println("Aendre medarbejderinfo");
-                    options.editStaff();
-                    break;
-                case 3:
-                    System.out.println("Slet meadarbejder");
-                    options.deleteStaff();
-                    break;
-                case 4:
-                    System.out.println("Afslut");
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
+
+        System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                System.out.println("Opret medarbejder");
+                options.createStaff();
+                break;
+            case 2:
+                System.out.println("Aendre medarbejderinfo");
+                options.editStaff();
+                break;
+            case 3:
+                System.out.println("Slet meadarbejder");
+                options.deleteStaff();
+                break;
+            case 4:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
         }
 
     }
