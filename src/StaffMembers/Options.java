@@ -3,24 +3,25 @@ package StaffMembers;
 import Members.Child;
 import Members.Parent;
 import Organising.Checked;
+import Organising.GetMethods;
 import Organising.Schedule;
 import Organising.Waitlist;
 
-import java.nio.charset.CharacterCodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
 public class Options
 {
-    Scanner scanner = new Scanner(System.in);
-    Scanner s = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in); //for ints
+    Scanner s = new Scanner(System.in); // for Strings
+
     Parent parent = new Parent();
     Child child = new Child();
     Staff staff = new Staff();
     Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
+    GetMethods get = new GetMethods();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String shiftTimeRegex = "(1[0-9]|[1-9]|2[0-4])-(1[0-9]|[1-9]|2[0-4])"; // 7-12
@@ -31,6 +32,7 @@ public class Options
     String accountRegex = "([0-9]{14})";
     String idRegex = "([0-9])";
     String passRegex = "[a-zA-ZÆØÅæøå0-9!?]{8,16}";
+    String shiftRegex = "[0-3][0-9], (1[0-9]||[1-9]||2[0-4])-(1[0-9]||[1-9]||2[0-4])";
 
     public String validateStuff(String attribute, String hint, String regex) {
         Scanner scanner = new Scanner(System.in);
@@ -45,41 +47,54 @@ public class Options
         }
     }
 
+    public String validateStuff(String attribute, String hint, String regex, boolean multiple) {
+        Scanner scanner = new Scanner(System.in);
+        String returnMe = "";
+        String input = "";
+        while (!input.equalsIgnoreCase("done")) {
+            System.out.println("Venligst indtast " + attribute);
+            input = scanner.nextLine();
+            if (input.matches(regex)) {
+                returnMe += input + ", ";
+                continue;
+            }
+            if(!input.equalsIgnoreCase("done")){
+                System.out.println(hint);
+            }
+        }
+        return returnMe.substring(0, returnMe.length() - 2);
+    }
+
     public void editParent(int parentId) {
-        int id = -1;
+        int id;
         if (parentId == -1) {
             System.out.println("Lad os ændre en forældre! \nIndtast ID på forældre, der skal ændres");
             id = scanner.nextInt();
         } else{
             id = parentId;
         }
-        Parent parent = getParent(id);
+        Parent parent = get.getParent(id);
         System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID \n3 Email \n4) Telefonnummer \5) Kontonummer \6) Adresse \7) Password");
         int choice = scanner.nextInt();
         switch (choice){
             case 1:
                 parent.setFirstname(validateStuff("fornavn på forældre", "Hint: Store forbogstaver", nameRegex));
-                parent.parentFileWriter(Parent.parentArray);
                 System.out.println("Fornavn er ændret!");
                 break;
             case 2:
                 parent.setLastname(validateStuff("efternavn på forældre", "Hint: Store forbogstaver", nameRegex));
-                parent.parentFileWriter(Parent.parentArray);
                 System.out.println("Efternavn er ændret!");
                 break;
             case 3:
                 parent.setEmail(validateStuff("e-mail","Hint: eksempel@gmail.com", emailRegex));
-                parent.parentFileWriter(Parent.parentArray);
                 System.out.println("Email er ændret");
                 break;
             case 4:
                 parent.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 91827384", numberRegex)));
-                parent.parentFileWriter(Parent.parentArray);
                 System.out.println("Telefonnummer er ændret");
                 break;
             case 5:
                 parent.setAccount(validateStuff("konto nr.", "Hint: 12345678901234", accountRegex));
-                parent.parentFileWriter(Parent.parentArray);
                 System.out.println("Kontonummer er ændret");
                 break;
             case 6:
@@ -89,13 +104,14 @@ public class Options
                 System.out.println("Mærkeligt input mand");
                 break;
         }
+        parent.parentFileWriter(Parent.parentArray);
     }
 
     public void abortParent() {
 
         System.out.println("Indtast ID der skal slettes");
         int parentId = scanner.nextInt();
-        int parenti = getIndexParent(parentId, Parent.parentArray);
+        int parenti = get.getIndexParent(parentId, Parent.parentArray);
         Child.childArray.removeIf(child -> child.getParentId() == parentId);
         Parent.parentArray.remove(parenti);
 
@@ -134,26 +150,46 @@ public class Options
 
     public void createShift(String monthString) {
         while (true) {
-            // TODO: 22-03-2020 Opret mere end én vagt på en gang?
+            String day = "";
             Schedule newShift = new Schedule();
             Date date = new Date();
             SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-
-            newShift.setId(Integer.parseInt(validateStuff("medarbejderens ID", "Hint: kun tal", idRegex)));
-            String day = validateStuff("dato for vagten", "Hint: dd", dateRegex);
             String year = yearFormat.format(date);
-            newShift.setDate(day + "/" + monthString + "-" + year);
-            newShift.setTime(validateStuff("tidspunkt for vagten", "Ex. 7-12, 7-17", shiftTimeRegex));
-            newShift.setHours(Integer.parseInt(newShift.getTime().split("-")[1]) - Integer.parseInt(newShift.getTime().split("-")[0]));
-            newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
-            Schedule.scheduleArray.add(newShift);
-            schedule.scheduleFileWriter(Schedule.scheduleArray);
-            System.out.println("Vagten er oprettet. Vil du oprette flere vagter? \n1) Ja 2) Nej");
+            int memberId = (Integer.parseInt(validateStuff("medarbejderens ID", "Hint: kun tal", idRegex)));
+            System.out.println("Vil du oprette flere identiske vagter over flere datoer? \n1) Ja 2) Nej");
             int choice = scanner.nextInt();
+            if (choice == 1){
+                String[] shift = validateStuff("dag og tid (dd, tt-tt)", "Hint: dd, tt-tt", shiftRegex, true).split(", ");
+                System.out.println("Hej breaktime pls, <TAL>");
+                for (int i = 0; i < shift.length; i+=2) {
+                    newShift = new Schedule();
+                    System.out.println(shift[i] + " " + shift[i+1]);
+                    day = shift[i];
+                    newShift.setId(memberId);
+                    newShift.setDate(day + "/" + monthString + "-" + year);
+                    newShift.setTime(shift[i+1]);
+                    newShift.setHours(Integer.parseInt(shift[i+1].split("-")[1]) - Integer.parseInt(shift[i+1].split("-")[0]));
+                    newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
+                    Schedule.printSchedule(newShift);
+                    Schedule.scheduleArray.add(newShift);
+                }
+            } else if (choice == 2) {
+                newShift.setId(memberId);
+                day = validateStuff("dato for vagten", "Hint: dd", dateRegex);
+                newShift.setDate(day + "/" + monthString + "-" + year);
+                newShift.setTime(validateStuff("tidspunkt for vagten", "Ex. 7-12, 7-17", shiftTimeRegex));
+                newShift.setHours(Integer.parseInt(newShift.getTime().split("-")[1]) - Integer.parseInt(newShift.getTime().split("-")[0]));
+                newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
+                Schedule.scheduleArray.add(newShift);
+            }
+            choice = 0;
+            System.out.println("Vagten er oprettet. Vil du oprette flere vagter? \n1) Ja 2) Nej");
+            choice = scanner.nextInt();
             if (choice == 2){
                 break;
             }
         }
+        schedule.scheduleFileWriter(Schedule.scheduleArray);
     }
 
     public String getEmptyTimetable(String currentMonth) {
@@ -163,7 +199,7 @@ public class Options
         while (true) {
             foundEmpty = true;
             for (int i = 0; i < Schedule.scheduleArray.size(); i++) {
-                if (currentMonth.equalsIgnoreCase(Schedule.scheduleArray.get(i).getDate().split("/")[1].split("-")[0])) {
+                if (currentMonth.equalsIgnoreCase(splitMe(Schedule.scheduleArray.get(i), false))) {
                     foundEmpty = false;
                     monthCount = Integer.parseInt(currentMonth);
                     monthCount++;
@@ -184,7 +220,7 @@ public class Options
         for (Schedule schedule: Schedule.scheduleArray) {
             String monthi = splitMe(schedule, false);
             if (monthi.equalsIgnoreCase(month)){
-                Staff staff = getStaff(schedule.getId());
+                Staff staff = get.getStaff(schedule.getId());
                 if(!temp.equalsIgnoreCase(splitMe(schedule, true))){
                     System.out.println("\n");
                     System.out.println("Dato : " + schedule.getDate());
@@ -219,7 +255,7 @@ public class Options
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-yyyy");
 
         int childId = scanner.nextInt();
-        Child child = getChild(childId);
+        Child child = get.getChild(childId);
         checked.setId(Checked.checkedKidsArray.size());
         checked.setChildId(childId);
         checked.setCheckIn(hourFormat.format(date));
@@ -239,7 +275,7 @@ public class Options
         System.out.println("Venligst indtast barnets ID");
         int childId = scanner.nextInt();
 
-        Checked checked = getCheckedChild(childId);
+        Checked checked = get.getCheckedChild(childId);
         String checkOut = hourFormat.format(date);
 
         int checkInHrs = splitTime(checked.getCheckIn(), true);
@@ -255,15 +291,6 @@ public class Options
 
         checked.checkedFileWriter(Checked.checkedKidsArray);
         System.out.println("Tjek ud er blevet oprettet.");
-    }
-
-    public Checked getCheckedChild(int id){
-        for (Checked checked : Checked.checkedKidsArray) {
-            if (id == checked.getChildId()){
-                return checked;
-            }
-        }
-        return null;
     }
 
     public int splitTime(String time, boolean hour){
@@ -297,7 +324,7 @@ public class Options
     {
         System.out.println("Indtast ID på medarbejder der skal slettes");
         int id = scanner.nextInt();
-        int staffIndex = getIndexStaff(id, Staff.staffArray);
+        int staffIndex = get.getIndexStaff(id, Staff.staffArray);
         Staff.staffArray.remove(staffIndex);
         staff.staffFileWriter(Staff.staffArray);
         System.out.println("Du har nu slettet en medarbejder");
@@ -307,7 +334,7 @@ public class Options
     {
         System.out.println("Du vil aendre en medarbejders oplysninger -> Indtast medarbejder ID");
         int id = scanner.nextInt();
-        Staff staff = getStaff(id);
+        Staff staff = get.getStaff(id);
         System.out.println("Her er dine valgmuligheder \n1) Fornavn \n2) Efternavn \n3) Email \n4) " +
                 "Telefon \n5) Adresse \n6) Stilling \n7) Kodeord");
         int choice = scanner.nextInt();
@@ -315,43 +342,37 @@ public class Options
         {
             case 1:
                 staff.setFirstname(validateStuff("fornavn", "Hint: Store forbogstaver", nameRegex));
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Fornavn er aendret \n");
                 break;
             case 2:
                 staff.setLastname(validateStuff("efternavn", "Hint: Store forbogstaver", nameRegex));
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Efternavn er aendret \n");
                 break;
             case 3:
                 staff.setEmail(validateStuff("email", "Hint: abc@hotmail.com", emailRegex));
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Email er aendret \n");
                 break;
             case 4:
                 staff.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 12345678", numberRegex)));
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Telefonnummer er aendret \n");
                 break;
             case 5:
                 staff.setAddress("Venligst indtast adresse" + s.nextLine());
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Adressen er aendret \n");
                 break;
             case 6:
                 staff.setRole("Venligst indtast stilling" + s.nextLine());
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Stilling er aendret \n");
                 break;
             case 7:
                 staff.setPassword(validateStuff("password", "Hint: Stort, småt, tal og tegn", passRegex));
-                staff.staffFileWriter(Staff.staffArray);
                 System.out.println("Kodeord er aendret \n");
                 break;
             default:
                 System.out.println("Aint gonna happen");
                 break;
         }
+        staff.staffFileWriter(Staff.staffArray);
     }
 
 
@@ -359,30 +380,28 @@ public class Options
     {
         System.out.println("Lad os ændre et barn! \nIndtast ID på barn, der skal ændres");
         int id = scanner.nextInt();
-        Child child = getChild(id);
+        Child child = get.getChild(id);
         System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID");
         int choice = scanner.nextInt();
         switch (choice)
         {
             case 1:
                 child.setFirstname(validateStuff("fornavn på barn", "Hint: Store forbogstaver", nameRegex));
-                child.childFileWriter(Child.childArray);
                 System.out.println("Fornavn er ændret!");
                 break;
             case 2:
                 child.setLastname(validateStuff("efternavn på barn", "Hint: Store forbogstaver", nameRegex));
-                child.childFileWriter(Child.childArray);
                 System.out.println("Efternavn er ændret!");
                 break;
             case 3:
                 child.setParentId(Integer.parseInt(validateStuff("forældre ID", "Hint: Kun tal", idRegex)));
-                child.childFileWriter(Child.childArray);
                 System.out.println("Forældre ID er rettet!");
                 break;
             default:
                 System.out.println("Mærkeligt input mand");
                 break;
         }
+        child.childFileWriter(Child.childArray);
     }
 
     public void abortChild()
@@ -415,7 +434,7 @@ public class Options
                 childId = Waitlist.waitlistArray.get(i).getId();
             }
         }
-        int childIndex = getIndexChild(childId, Child.childArray);
+        int childIndex = get.getIndexChild(childId, Child.childArray);
         Waitlist.waitlistArray.remove(childIndex);
         waitlist.waitlistFileWriter(Waitlist.waitlistArray);
         System.out.println("THE KID HAS BEEN ABO--- DELETED");
@@ -492,6 +511,7 @@ public class Options
             System.out.println();
         }
     }
+<<<<<<< HEAD
 
     /*public void News()
     {
@@ -631,4 +651,6 @@ public class Options
         }
         return -1;
     }
+=======
+>>>>>>> bfb0a1acc210e0e7f13d5de582f4d116c1f3c1f3
 }

@@ -1,10 +1,14 @@
 import Members.Child;
 import Members.Parent;
 import Members.ParentOptions;
+import Organising.GetMethods;
 import StaffMembers.Options;
 import StaffMembers.Staff;
+<<<<<<< HEAD
 import org.w3c.dom.ls.LSOutput;
 //import StaffMembers.StaffOptions;
+=======
+>>>>>>> bfb0a1acc210e0e7f13d5de582f4d116c1f3c1f3
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,54 +20,77 @@ public class Menu
     public static int id = -1;
     Scanner scanner = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
-//    StaffOptions staffOptions = new StaffOptions();
     ParentOptions parentOptions = new ParentOptions();
     Options options = new Options();
+    GetMethods get = new GetMethods();
 
     public void menu() {
         while (true) {
-            System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre?");
-            int role = scanner.nextInt();
-            if (role == 1){
+            System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre? \n3) Glemt ID?");
+            int choice = scanner.nextInt();
+            if (choice == 1){
                 boolean loggedIn = logIn();
                 if (loggedIn){
-                    Staff staff = options.getStaff(id);
+                    Staff staff = get.getStaff(id);
                     if (staff.getRole().equalsIgnoreCase("admin")) {adminOptions();}
                     else{staffOptions(staff);}
                 }
                 break;
-            } else if (role == 2){
+            } else if (choice == 2){
                 System.out.println("Venligst indtast dit barns ID.");
                 id = scanner.nextInt();
                 int checked = checkIdChild(id);
                 if (checked == 1){
-                    Parent parent = options.getParent(options.getChild(id).getParentId());
+                    Parent parent = get.getParent(get.getChild(id).getParentId());
                     parentOptions.options(parent);
                 } else{
-                    System.out.println("Beklager, dit ID virker ikke.");
+                    System.out.println("Beklager, dit ID eksisterer ikke.");
                 }
                 break;
-            } else{
+            } else if (choice == 3) {
+                int id = forgottenIDStaff();
+                if (id != -1) {
+                    System.out.println("Dit ID er: " + id);
+                } else {
+                    System.out.println("Kunne ikke finde dit navn i systemet, prøv igen.");
+                }
+            }else {
                 System.out.println("Mærkeligt input alligevel...");
             }
         }
     }
 
     private boolean logIn() {
-        boolean loggedIn = false;
         System.out.println("Venligst indtast dit ID.");
         id = scanner.nextInt();
         int checkId = checkIdStaff(id);
         if (checkId == 1){
             System.out.println("Indtast password.");
             String pass = s.nextLine();
-            Staff staff = options.getStaff(id);
+            Staff staff = get.getStaff(id);
             if (staff.getPassword().equals(pass)) {
                 return true;
             }
         }
         System.out.println("Username or pass was wrong, sorry, man.");
         return false;
+    }
+
+    public int forgottenIDStaff()
+    {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Indtast dit fornavn");
+        String firstname = s.nextLine();
+        System.out.println("Indtast dit efternavn");
+        String lastname = s.nextLine();
+        //Medlem indtaster deres navn, og vi tjekker databasen igennem for navnet
+        //Hvis det ikke findes, sættes returneres -1
+        for (Staff staff : Staff.staffArray) {
+            if (staff.getFirstname().equalsIgnoreCase(firstname) && staff.getLastname().equalsIgnoreCase(lastname)){
+                return staff.getId();
+            }
+        }
+        return -1;
     }
 
     private int checkIdStaff(int id) {

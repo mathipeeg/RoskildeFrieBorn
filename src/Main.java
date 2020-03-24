@@ -26,9 +26,8 @@ public class Main
         Schedule.scheduleArray = schedule.initialiseInfo();
         Checked.checkedKidsArray = checked.initialiseInfo();
 
-//        Date date = new Date();
-//        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-//        System.out.println("hour: " + hourFormat.format(date));
-        menu.menu();
+        menu.options.createShift("04");
+
+        //menu.menu();
     }
 }
