@@ -80,4 +80,25 @@ public class GetMethods {
         }
         return null;
     }
+
+    public News getNews (int id)
+    {
+        for (int i = 0; i < News.newsArray.size(); i++)
+        {
+            if (News.newsArray.get(i).getId() == id)
+            {
+                return News.newsArray.get(i);
+            }
+        }
+        return null;
+    }
+
+    public int getIndexNews(int id, ArrayList<News> array){
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
 }

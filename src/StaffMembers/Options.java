@@ -2,12 +2,12 @@ package StaffMembers;
 
 import Members.Child;
 import Members.Parent;
-import Organising.Checked;
-import Organising.GetMethods;
-import Organising.Schedule;
-import Organising.Waitlist;
+import Organising.*;
 
+import java.nio.charset.CharacterCodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -22,6 +22,7 @@ public class Options
     Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
     GetMethods get = new GetMethods();
+    News news = new News();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String shiftTimeRegex = "(1[0-9]|[1-9]|2[0-4])-(1[0-9]|[1-9]|2[0-4])"; // 7-12
@@ -159,20 +160,7 @@ public class Options
             System.out.println("Vil du oprette flere identiske vagter over flere datoer? \n1) Ja 2) Nej");
             int choice = scanner.nextInt();
             if (choice == 1){
-                String[] shift = validateStuff("dag og tid (dd, tt-tt)", "Hint: dd, tt-tt", shiftRegex, true).split(", ");
-                System.out.println("Hej breaktime pls, <TAL>");
-                for (int i = 0; i < shift.length; i+=2) {
-                    newShift = new Schedule();
-                    System.out.println(shift[i] + " " + shift[i+1]);
-                    day = shift[i];
-                    newShift.setId(memberId);
-                    newShift.setDate(day + "/" + monthString + "-" + year);
-                    newShift.setTime(shift[i+1]);
-                    newShift.setHours(Integer.parseInt(shift[i+1].split("-")[1]) - Integer.parseInt(shift[i+1].split("-")[0]));
-                    newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
-                    Schedule.printSchedule(newShift);
-                    Schedule.scheduleArray.add(newShift);
-                }
+                createMultipleShifts(newShift, day, memberId, monthString, year);
             } else if (choice == 2) {
                 newShift.setId(memberId);
                 day = validateStuff("dato for vagten", "Hint: dd", dateRegex);
@@ -190,6 +178,23 @@ public class Options
             }
         }
         schedule.scheduleFileWriter(Schedule.scheduleArray);
+    }
+
+    public void createMultipleShifts(Schedule newShift, String day, int memberId, String monthString, String year){
+        String[] shift = validateStuff("dag og tid (dd, (t)t-tt)", "Hint: ex. 12, 7-17", shiftRegex, true).split(", ");
+        System.out.println("Hej breaktime pls, <TAL>");
+        for (int i = 0; i < shift.length; i+=2) {
+            newShift = new Schedule();
+            System.out.println(shift[i] + " " + shift[i+1]);
+            day = shift[i];
+            newShift.setId(memberId);
+            newShift.setDate(day + "/" + monthString + "-" + year);
+            newShift.setTime(shift[i+1]);
+            newShift.setHours(Integer.parseInt(shift[i+1].split("-")[1]) - Integer.parseInt(shift[i+1].split("-")[0]));
+            newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
+            Schedule.printSchedule(newShift);
+            Schedule.scheduleArray.add(newShift);
+        }
     }
 
     public String getEmptyTimetable(String currentMonth) {
@@ -290,7 +295,24 @@ public class Options
         checked.setAllHours(newHour + ":" + newMins);
 
         checked.checkedFileWriter(Checked.checkedKidsArray);
-        System.out.println("Tjek ud er blevet oprettet.");
+        System.out.println("Barn udtjekket.");
+    }
+    public void wipeArray () throws ParseException {
+        Date date = new Date ();
+        Checked checked = new Checked();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM-yyyy");
+        String currentDate = simpleDateFormat.format(date);
+
+        Date current = new SimpleDateFormat("dd/mm-yyyy").parse(currentDate);
+        Date former = new SimpleDateFormat("dd/mm-yyyy").parse(Checked.checkedKidsArray.get(0).getDate());
+        if(former.before(current))
+        {
+        Checked.checkedKidsArray.clear();
+        checked.checkedFileWriter(Checked.checkedKidsArray);
+        }
+
+
     }
 
     public int splitTime(String time, boolean hour){
@@ -511,84 +533,6 @@ public class Options
             System.out.println();
         }
     }
-<<<<<<< HEAD
-
-    /*public void News()
-    {
-        public void createNews()
-        {
-            String header = scanner.next();
-            System.out.println("Du e rnu klar til at oprette nyheder");
-            News newNews = new News();
-
-            newNews.setHeader(s.nextLine());
-
-
-            System.out.println("Overskriften er " + setHeader);
-        }
-
-        public void deleteNews()
-        {
-            System.out.println("Indtast ID på medarbejder der skal slettes");
-            int id = scanner.nextInt();
-            int staffIndex = getIndexStaff(id, Staff.staffArray);
-            Staff.staffArray.remove(staffIndex);
-            staff.staffFileWriter(Staff.staffArray);
-            System.out.println("Du har nu slettet en medarbejder");
-        }
-
-        public void editStaff()
-        {
-            System.out.println("Du vil aendre en medarbejders oplysninger -> Indtast medarbejder ID");
-            int id = scanner.nextInt();
-            Staff staff = getStaff(id);
-            System.out.println("Her er dine valgmuligheder \n1) Fornavn \n2) Efternavn \n3) Email \n4) " +
-                    "Telefon \n5) Adresse \n6) Stilling \n7) Kodeord");
-            int choice = scanner.nextInt();
-            switch (choice)
-            {
-                case 1:
-                    staff.setFirstname(validateStuff("fornavn", "Hint: Store forbogstaver", nameRegex));
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Fornavn er aendret \n");
-                    break;
-                case 2:
-                    staff.setLastname(validateStuff("efternavn", "Hint: Store forbogstaver", nameRegex));
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Efternavn er aendret \n");
-                    break;
-                case 3:
-                    staff.setEmail(validateStuff("email", "Hint: abc@hotmail.com", emailRegex));
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Email er aendret \n");
-                    break;
-                case 4:
-                    staff.setPhone(Integer.parseInt(validateStuff("telefon", "Hint: 12345678", numberRegex)));
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Telefonnummer er aendret \n");
-                    break;
-                case 5:
-                    staff.setAddress("Venligst indtast adresse" + s.nextLine());
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Adressen er aendret \n");
-                    break;
-                case 6:
-                    staff.setRole("Venligst indtast stilling" + s.nextLine());
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Stilling er aendret \n");
-                    break;
-                case 7:
-                    staff.setPassword(validateStuff("password", "Hint: Stort, småt, tal og tegn", passRegex));
-                    staff.staffFileWriter(Staff.staffArray);
-                    System.out.println("Kodeord er aendret \n");
-                    break;
-                default:
-                    System.out.println("Aint gonna happen");
-                    break;
-            }
-        }*/
-
-
         public Parent getParent(int parentId)
     {
         for (int i = 0; i < Parent.parentArray.size(); i++)
@@ -651,6 +595,68 @@ public class Options
         }
         return -1;
     }
-=======
->>>>>>> bfb0a1acc210e0e7f13d5de582f4d116c1f3c1f3
+
+    public void createNews()
+    {
+        System.out.println("Du har valgt at oprette nye nyheder");
+        News newNews = new News();
+
+        newNews.setId(News.newsArray.size());
+        System.out.println("Venlig indtast en overskrift");
+        newNews.setHeadLine(s.nextLine());
+        System.out.println("Skriv noget indhold");
+        newNews.setBody(s.nextLine());
+
+
+        News.newsArray.add(newNews);
+        news.newsFileWriter(News.newsArray);
+        System.out.println("Dine nyheder er lavet, TILLYKKE!");
+
+
+    }
+
+    public void seeNews()
+    {
+        for (int i = 0; i < News.newsArray.size(); i++)
+        {
+            System.out.println("Du har valgt at se nyheder");
+            System.out.println("Virker det ?" + News.newsArray.get(i).getHeadLine());
+            System.out.println(News.newsArray.get(i).getBody());
+        }
+    }
+
+    public void editNews()
+    {
+        System.out.println("Du har valgt at ændre nogle nyheder \nIndtast ID på nyheden, der skal ændres");
+        int id = scanner.nextInt();
+        News news = get.getNews(id);
+        System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
+        {
+            case 1:
+                System.out.println("Ændre overskift");
+                news.setHeadLine(s.nextLine());
+                break;
+            case 2:
+                System.out.println("Ændre indhold");
+                news.setBody(s.nextLine());
+                break;
+            case 3:
+                System.out.println("Afslut");
+                break;
+        }
+        news.newsFileWriter(News.newsArray);
+    }
+
+    public void deleteNews()
+    {
+        System.out.println("Indtast ID på nyhed der skal slettes");
+        int id = scanner.nextInt();
+        int newsIndex = get.getIndexNews(id, News.newsArray);
+        News.newsArray.remove(newsIndex);
+        news.newsFileWriter(News.newsArray);
+        System.out.println("Nyhederne er nu slettet");
+
+    }
 }

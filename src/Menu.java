@@ -1,7 +1,7 @@
 import Members.Child;
 import Members.Parent;
-import Members.ParentOptions;
 import Organising.GetMethods;
+import Organising.News;
 import StaffMembers.Options;
 import StaffMembers.Staff;
 <<<<<<< HEAD
@@ -10,6 +10,7 @@ import org.w3c.dom.ls.LSOutput;
 =======
 >>>>>>> bfb0a1acc210e0e7f13d5de582f4d116c1f3c1f3
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -20,11 +21,11 @@ public class Menu
     public static int id = -1;
     Scanner scanner = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
-    ParentOptions parentOptions = new ParentOptions();
     Options options = new Options();
     GetMethods get = new GetMethods();
 
-    public void menu() {
+
+    public void menu() throws ParseException {
         while (true) {
             System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre? \n3) Glemt ID?");
             int choice = scanner.nextInt();
@@ -42,7 +43,7 @@ public class Menu
                 int checked = checkIdChild(id);
                 if (checked == 1){
                     Parent parent = get.getParent(get.getChild(id).getParentId());
-                    parentOptions.options(parent);
+                    options(parent);
                 } else{
                     System.out.println("Beklager, dit ID eksisterer ikke.");
                 }
@@ -112,7 +113,7 @@ public class Menu
         return 0;
     }
 
-    public void adminOptions() {
+    public void adminOptions() throws ParseException {
         while (true) {
             System.out.println("Dine valgmuligheder: \n1) Nyheder \n2) Opret/Aendre boern " +
                     "\n3) Aendre foraeldreinfo \n4) Opret/Aendre medarbejdere \n5) Timeplan " +
@@ -121,6 +122,7 @@ public class Menu
             switch (choice) {
                 case 1:
                     System.out.println("News");
+                    newsOptions();
                     // TODO: 22-03-2020 Eventuelle news
                     //Malene og Mads
                     break;
@@ -144,12 +146,10 @@ public class Menu
                 case 6:
                     System.out.println("Venteliste");
                     waitlistOptions();
-                    //Casper
                     break;
                 case 7:
                     System.out.println("Indtjek/Udtjek barn");
                     checkedInOut();
-                    //Casper
                     break;
                 case 8:
                     System.out.println("Logger ud...");
@@ -165,8 +165,66 @@ public class Menu
         System.out.println("Velkommen på nyhedssiden");
         //indlæs og switch funkktion mellem læse, redigere og opret
 
-    public void staffOptions(Staff currentStaff)
+    public void options(Parent parent)
     {
+        System.out.println("Velkommen " + parent.getFirstname() + "!");
+        while (true){
+            System.out.println("Vil du \n1) Se nyheder \n2) Ændr din information \n3) Afslut");
+            int choice = scanner.nextInt();
+            if (choice == 1){
+                System.out.println("NEWS");
+                // TODO: nyheder her ^
+                break;
+            } else if (choice == 2){
+                System.out.println("CHANGE YOUR INFO");
+                options.editParent(parent.getId());
+                break;
+            } else if (choice == 3){
+                System.out.println("See ya :)");
+                break;
+            } else{
+                System.out.println("Mærkeligt input alligevel...");
+            }
+        }
+    }
+
+    private void newsOptions()
+    {
+        System.out.println("Vil du \n1) Se nyheder \n2) Opret nyhder \n3) Ændre nyheder \n4) " +
+                "Slet nyheder \n5) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
+        {
+            // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
+            // TODO: Dato, publisher
+            // TODO: stilling check
+
+            case 1:
+                System.out.println("Se nyheder");
+                options.seeNews();
+                break;
+            case 2:
+                System.out.println("Opret nyheder");
+                options.createNews();
+                break;
+            case 3:
+                System.out.println("ændre nyheder");
+                options.editNews();
+                break;
+            case 4:
+                System.out.println("Slet nyheder");
+                options.deleteNews();
+                break;
+            case 5:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
+        }
+    }
+
+    public void staffOptions(Staff currentStaff) throws ParseException {
         System.out.println("VELKOMMEN " + currentStaff.getFirstname() + " " + currentStaff.getLastname());
         System.out.println("Vil du \n1) Opret/se nyheder \n2) Se timeplan \n3) Ændr dine informationer " +
                 "\n4) Se barns info \n5) Indskriv barn \n6) Afslut");
@@ -175,6 +233,7 @@ public class Menu
         {
             case 1:
                 System.out.println("nyheder");
+                // TODO: Nyheder
                 break;
             case 2:
                 System.out.println("Timeplan");
@@ -270,29 +329,28 @@ public class Menu
     }
 
     public void adminStaffOptions() {
-        while (true) {
-            System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    System.out.println("Opret medarbejder");
-                    options.createStaff();
-                    break;
-                case 2:
-                    System.out.println("Aendre medarbejderinfo");
-                    options.editStaff();
-                    break;
-                case 3:
-                    System.out.println("Slet meadarbejder");
-                    options.deleteStaff();
-                    break;
-                case 4:
-                    System.out.println("Afslut");
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
+
+        System.out.println("1) Opret medarbejder \n2) Aendre medarbejder info \n3) Slet medarbejder \n4) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                System.out.println("Opret medarbejder");
+                options.createStaff();
+                break;
+            case 2:
+                System.out.println("Aendre medarbejderinfo");
+                options.editStaff();
+                break;
+            case 3:
+                System.out.println("Slet meadarbejder");
+                options.deleteStaff();
+                break;
+            case 4:
+                System.out.println("Afslut");
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
         }
 
     }
@@ -321,8 +379,7 @@ public class Menu
         }
     }
 
-    public void checkedInOut()
-    {
+    public void checkedInOut() throws ParseException {
         System.out.println("1)Indskriv barn \n2)Udtjek barn \n3)Afslut");
 
         int choice = scanner.nextInt();

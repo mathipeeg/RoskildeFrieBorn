@@ -1,17 +1,17 @@
 import Members.Child;
 import Members.Parent;
 import Organising.Checked;
+import Organising.News;
 import Organising.Schedule;
 import Organising.Waitlist;
+import StaffMembers.Options;
 import StaffMembers.Staff;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.text.ParseException;
 
 public class Main
 {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws ParseException {
         Child child = new Child();
         Parent parent = new Parent();
         Staff staff = new Staff();
@@ -19,15 +19,16 @@ public class Main
         Schedule schedule = new Schedule();
         Menu menu = new Menu();
         Checked checked = new Checked();
+        News news = new  News();
+        Options options = new Options();
         Child.childArray = child.initialiseInfo();
         Parent.parentArray = parent.initialiseInfo();
         Staff.staffArray = staff.initialiseInfo();
         Waitlist.waitlistArray = waitlist.initialiseInfo();
         Schedule.scheduleArray = schedule.initialiseInfo();
         Checked.checkedKidsArray = checked.initialiseInfo();
-
-        menu.options.createShift("04");
-
-        //menu.menu();
+        options.wipeArray();
+        News.newsArray = news.initialiseInfo();
+        menu.menu();
     }
 }
