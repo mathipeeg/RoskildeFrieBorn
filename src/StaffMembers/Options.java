@@ -4,6 +4,8 @@ import Members.Child;
 import Members.Parent;
 import Organising.*;
 
+import java.nio.charset.CharacterCodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -292,7 +294,24 @@ public class Options
         checked.setAllHours(newHour + ":" + newMins);
 
         checked.checkedFileWriter(Checked.checkedKidsArray);
-        System.out.println("Tjek ud er blevet oprettet.");
+        System.out.println("Barn udtjekket.");
+    }
+    public void wipeArray () throws ParseException {
+        Date date = new Date ();
+        Checked checked = new Checked();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM-yyyy");
+        String currentDate = simpleDateFormat.format(date);
+
+        Date current = new SimpleDateFormat("dd/mm-yyyy").parse(currentDate);
+        Date former = new SimpleDateFormat("dd/mm-yyyy").parse(Checked.checkedKidsArray.get(0).getDate());
+        if(former.before(current))
+        {
+        Checked.checkedKidsArray.clear();
+        checked.checkedFileWriter(Checked.checkedKidsArray);
+        }
+
+
     }
 
     public int splitTime(String time, boolean hour){
