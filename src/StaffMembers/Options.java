@@ -157,20 +157,7 @@ public class Options
             System.out.println("Vil du oprette flere identiske vagter over flere datoer? \n1) Ja 2) Nej");
             int choice = scanner.nextInt();
             if (choice == 1){
-                String[] shift = validateStuff("dag og tid (dd, tt-tt)", "Hint: dd, tt-tt", shiftRegex, true).split(", ");
-                System.out.println("Hej breaktime pls, <TAL>");
-                for (int i = 0; i < shift.length; i+=2) {
-                    newShift = new Schedule();
-                    System.out.println(shift[i] + " " + shift[i+1]);
-                    day = shift[i];
-                    newShift.setId(memberId);
-                    newShift.setDate(day + "/" + monthString + "-" + year);
-                    newShift.setTime(shift[i+1]);
-                    newShift.setHours(Integer.parseInt(shift[i+1].split("-")[1]) - Integer.parseInt(shift[i+1].split("-")[0]));
-                    newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
-                    Schedule.printSchedule(newShift);
-                    Schedule.scheduleArray.add(newShift);
-                }
+                createMultipleShifts(newShift, day, memberId, monthString, year);
             } else if (choice == 2) {
                 newShift.setId(memberId);
                 day = validateStuff("dato for vagten", "Hint: dd", dateRegex);
@@ -188,6 +175,23 @@ public class Options
             }
         }
         schedule.scheduleFileWriter(Schedule.scheduleArray);
+    }
+
+    public void createMultipleShifts(Schedule newShift, String day, int memberId, String monthString, String year){
+        String[] shift = validateStuff("dag og tid (dd, (t)t-tt)", "Hint: ex. 12, 7-17", shiftRegex, true).split(", ");
+        System.out.println("Hej breaktime pls, <TAL>");
+        for (int i = 0; i < shift.length; i+=2) {
+            newShift = new Schedule();
+            System.out.println(shift[i] + " " + shift[i+1]);
+            day = shift[i];
+            newShift.setId(memberId);
+            newShift.setDate(day + "/" + monthString + "-" + year);
+            newShift.setTime(shift[i+1]);
+            newShift.setHours(Integer.parseInt(shift[i+1].split("-")[1]) - Integer.parseInt(shift[i+1].split("-")[0]));
+            newShift.setBreakTime(Integer.parseInt(validateStuff("pause længde i minutter", "Hint: Kun tal", dateRegex)));
+            Schedule.printSchedule(newShift);
+            Schedule.scheduleArray.add(newShift);
+        }
     }
 
     public String getEmptyTimetable(String currentMonth) {
