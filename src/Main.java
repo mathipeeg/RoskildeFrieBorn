@@ -1,14 +1,13 @@
 import Members.Child;
 import Members.Parent;
 import Organising.Checked;
+import Organising.News;
 import Organising.Schedule;
 import Organising.Waitlist;
-import StaffMembers.AdminOptions;
+import StaffMembers.Options;
 import StaffMembers.Staff;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Main
 {
@@ -20,17 +19,16 @@ public class Main
         Schedule schedule = new Schedule();
         Menu menu = new Menu();
         Checked checked = new Checked();
-        AdminOptions adminOptions = new AdminOptions();
+        News news = new  News();
+        Options options = new Options();
         Child.childArray = child.initialiseInfo();
         Parent.parentArray = parent.initialiseInfo();
         Staff.staffArray = staff.initialiseInfo();
         Waitlist.waitlistArray = waitlist.initialiseInfo();
         Schedule.scheduleArray = schedule.initialiseInfo();
         Checked.checkedKidsArray = checked.initialiseInfo();
-        adminOptions.wipeArray();
-//        Date date = new Date();
-//        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-//        System.out.println("hour: " + hourFormat.format(date));
+        options.wipeArray();
+        News.newsArray = news.initialiseInfo();
         menu.menu();
     }
 }
