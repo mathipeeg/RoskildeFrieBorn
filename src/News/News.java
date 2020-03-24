@@ -1,4 +1,4 @@
-package Organising;
+package News;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +59,7 @@ public class News
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Organising/News"));
+            input = new Scanner(new File("src/News/News"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -93,7 +93,7 @@ public class News
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Organising/News");
+            fileWriter = new FileWriter("src/News/News");
             writeNewsInfo(fileWriter, newsArray);
             fileWriter.close();
         } catch (IOException e)
