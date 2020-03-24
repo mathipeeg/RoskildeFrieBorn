@@ -561,6 +561,7 @@ public class Options
             System.out.println(News.newsArray.get(i).getBody());
         }
     }
+    //HEEEJ
 
     public void editNews()
     {
