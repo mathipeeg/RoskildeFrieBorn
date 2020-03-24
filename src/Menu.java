@@ -4,11 +4,6 @@ import Organising.GetMethods;
 import Organising.News;
 import StaffMembers.Options;
 import StaffMembers.Staff;
-<<<<<<< HEAD
-import org.w3c.dom.ls.LSOutput;
-//import StaffMembers.StaffOptions;
-=======
->>>>>>> bfb0a1acc210e0e7f13d5de582f4d116c1f3c1f3
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -161,9 +156,6 @@ public class Menu
             }
         }
     }
-    public void newsOptions(){
-        System.out.println("Velkommen på nyhedssiden");
-        //indlæs og switch funkktion mellem læse, redigere og opret
 
     public void options(Parent parent)
     {
@@ -188,13 +180,11 @@ public class Menu
         }
     }
 
-    private void newsOptions()
-    {
+    public void newsOptions() {
         System.out.println("Vil du \n1) Se nyheder \n2) Opret nyhder \n3) Ændre nyheder \n4) " +
                 "Slet nyheder \n5) Afslut");
         int choice = scanner.nextInt();
-        switch (choice)
-        {
+        switch (choice) {
             // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
             // TODO: Dato, publisher
             // TODO: stilling check

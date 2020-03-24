@@ -251,7 +251,7 @@ public class Options
         return schedule.getDate().split("/")[0];
     }
 
-    public void checkChild ()
+    public void checkChild()
     {
         System.out.println("Venligst indtast Barnets ID: ");
         Checked checked = new Checked();
@@ -297,6 +297,7 @@ public class Options
         checked.checkedFileWriter(Checked.checkedKidsArray);
         System.out.println("Barn udtjekket.");
     }
+
     public void wipeArray () throws ParseException {
         Date date = new Date ();
         Checked checked = new Checked();
@@ -311,8 +312,6 @@ public class Options
         Checked.checkedKidsArray.clear();
         checked.checkedFileWriter(Checked.checkedKidsArray);
         }
-
-
     }
 
     public int splitTime(String time, boolean hour){
@@ -560,7 +559,6 @@ public class Options
             System.out.println(News.newsArray.get(i).getBody());
         }
     }
-    //HEEEJ
 
     public void editNews()
     {
