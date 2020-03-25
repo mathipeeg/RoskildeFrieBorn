@@ -94,7 +94,7 @@ public class Schedule
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Organising/Schedule"));
+            input = new Scanner(new File("src/Tools/Schedule"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class Schedule
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Organising/Schedule");
+            fileWriter = new FileWriter("src/Tools/Schedule");
             writeScheduleInfo(fileWriter, scheduleArray);
             fileWriter.close();
         } catch (IOException e)

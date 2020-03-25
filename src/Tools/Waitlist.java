@@ -132,7 +132,7 @@ public class Waitlist
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Organising/Waitlist"));
+            input = new Scanner(new File("src/Tools/Waitlist"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -189,7 +189,7 @@ public class Waitlist
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Organising/Waitlist");
+            fileWriter = new FileWriter("src/Tools/Waitlist");
             writeWaitlistInfo(fileWriter, waitlistArray);
             fileWriter.close();
         } catch (IOException e)

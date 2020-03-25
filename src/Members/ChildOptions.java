@@ -2,6 +2,7 @@ package Members;
 
 import Tools.HelpingMethods;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ChildOptions {
@@ -17,47 +18,52 @@ public class ChildOptions {
     {
         System.out.println("Lad os ændre et barn! \nIndtast ID på barn, der skal ændres");
         int id = intScan.nextInt();
-        Child child = help.getChild(id);
-        System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID");
-        int choice = intScan.nextInt();
-        switch (choice)
-        {
-            case 1:
-                child.setFirstname(help.validateStuff("fornavn på barn", "Hint: Store forbogstaver", help.nameRegex));
-                System.out.println("Fornavn er ændret!");
-                break;
-            case 2:
-                child.setLastname(help.validateStuff("efternavn på barn", "Hint: Store forbogstaver", help.nameRegex));
-                System.out.println("Efternavn er ændret!");
-                break;
-            case 3:
-                child.setParentId(Integer.parseInt(help.validateStuff("forældre ID", "Hint: Kun tal", help.idRegex)));
-                System.out.println("Forældre ID er rettet!");
-                break;
-            default:
-                System.out.println("Mærkeligt input mand");
-                break;
+        if (help.checkId(id, true, false, false, false)) {
+            Child child = help.getChild(id);
+            System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID");
+            int choice = intScan.nextInt();
+            switch (choice) {
+                case 1:
+                    child.setFirstname(help.validateStuff("fornavn på barn", "Hint: Store forbogstaver", help.nameRegex));
+                    System.out.println("Fornavn er ændret!");
+                    break;
+                case 2:
+                    child.setLastname(help.validateStuff("efternavn på barn", "Hint: Store forbogstaver", help.nameRegex));
+                    System.out.println("Efternavn er ændret!");
+                    break;
+                case 3:
+                    child.setParentId(Integer.parseInt(help.validateStuff("forældre ID", "Hint: Kun tal", help.idRegex)));
+                    System.out.println("Forældre ID er rettet!");
+                    break;
+                default:
+                    System.out.println("Mærkeligt input mand");
+                    break;
+            }
+            child.childFileWriter(Child.childArray);
+        } else{
+            System.out.println("ID eksisterer ikke. Prøv igen med et andet ID.");
         }
-        child.childFileWriter(Child.childArray);
     }
 
     public void abortChild()
     {
         System.out.println("Indtast ID på barn der skal slettes");
         int id = intScan.nextInt();
-        int parentId = -1;
-        for (int i = 0; i < Child.childArray.size(); i++)
-        {
-            if (Child.childArray.get(i).getId() == id)
-            {
-                parentId = Child.childArray.get(i).getParentId();
+        if (help.checkId(id, true, false, false, false)) {
+            int parentId = -1;
+            for (int i = 0; i < Child.childArray.size(); i++) {
+                if (Child.childArray.get(i).getId() == id) {
+                    parentId = Child.childArray.get(i).getParentId();
+                }
             }
+            Child.childArray.remove(id);
+            Parent.parentArray.remove(parentId);
+            child.childFileWriter(Child.childArray);
+            parent.parentFileWriter(Parent.parentArray);
+            System.out.println("YOUR KID HAS BEEN ABO--- DELETED");
+        } else {
+            System.out.println("ID eksisterer ikke. Prøv igen med et andet ID.");
         }
-        Child.childArray.remove(id);
-        Parent.parentArray.remove(parentId);
-        child.childFileWriter(Child.childArray);
-        parent.parentFileWriter(Parent.parentArray);
-        System.out.println("YOUR KID HAS BEEN ABO--- DELETED");
     }
 
     public void createChild()

@@ -2,6 +2,7 @@ package News;
 
 import Tools.HelpingMethods;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NewsOptions {
@@ -16,6 +17,7 @@ public class NewsOptions {
     {
         for (int i = 0; i < News.newsArray.size(); i++)
         {
+            // TODO: 25-03-2020 Noget andet herinde?
             System.out.println("Du har valgt at se nyheder");
             System.out.println("Virker det ?" + News.newsArray.get(i).getHeadLine());
             System.out.println(News.newsArray.get(i).getBody());
@@ -33,7 +35,6 @@ public class NewsOptions {
         System.out.println("Skriv noget indhold");
         newNews.setBody(stringScan.nextLine());
 
-
         News.newsArray.add(newNews);
         news.newsFileWriter(News.newsArray);
         System.out.println("Dine nyheder er lavet, TILLYKKE!");
@@ -43,24 +44,28 @@ public class NewsOptions {
     {
         System.out.println("Du har valgt at ændre nogle nyheder \nIndtast ID på nyheden, der skal ændres");
         int id = intScan.nextInt();
-        News news = help.getNews(id);
-        System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
-        int choice = intScan.nextInt();
-        switch (choice)
-        {
-            case 1:
-                System.out.println("Ændre overskift");
-                news.setHeadLine(stringScan.nextLine());
-                break;
-            case 2:
-                System.out.println("Ændre indhold");
-                news.setBody(stringScan.nextLine());
-                break;
-            case 3:
-                System.out.println("Afslut");
-                break;
+        if (help.checkId(id, false, false, true, false)){
+            News news = help.getNews(id);
+            System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
+            int choice = intScan.nextInt();
+            switch (choice)
+            {
+                case 1:
+                    System.out.println("Ændre overskift");
+                    news.setHeadLine(stringScan.nextLine());
+                    break;
+                case 2:
+                    System.out.println("Ændre indhold");
+                    news.setBody(stringScan.nextLine());
+                    break;
+                case 3:
+                    System.out.println("Afslut");
+                    break;
+            }
+            news.newsFileWriter(News.newsArray);
+        } else{
+            System.out.println("ID eksisterer ikke. Prøv med et andet.");
         }
-        news.newsFileWriter(News.newsArray);
     }
 
     public void deleteNews()

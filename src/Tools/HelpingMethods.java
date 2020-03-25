@@ -174,4 +174,36 @@ public class HelpingMethods {
         }
     }
 
+    public boolean checkId(int id, boolean child, boolean parent, boolean news, boolean waitlist){
+        if (child){
+            for (Child kid :
+                    Child.childArray) {
+                if (kid.getId() == id) {
+                    return true;
+                }
+            }
+        } else if(parent) {
+            for (Parent adult :
+                    Parent.parentArray) {
+                if (adult.getId() == id) {
+                    return true;
+                }
+            }
+        } else if (news){
+            for (News newsElement :
+                    News.newsArray) {
+                if (newsElement.getId() == id){
+                    return true;
+                }
+            }
+        } else if (waitlist) {
+            for (Waitlist waitlistElement :
+                    Waitlist.waitlistArray) {
+                if (waitlistElement.getId() == id) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

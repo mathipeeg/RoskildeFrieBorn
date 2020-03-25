@@ -25,17 +25,21 @@ public class StaffOptions
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-yyyy");
 
         int childId = intScan.nextInt();
-        Child child = help.getChild(childId);
-        checked.setId(Checked.checkedKidsArray.size());
-        checked.setChildId(childId);
-        checked.setCheckIn(hourFormat.format(date));
-        checked.setDate(dateFormat.format(date));
-        checked.setAllHours("0");
-        checked.setCheckOut("0");
+        if(help.checkId(childId, true, false, false, false)){
+            Child child = help.getChild(childId);
+            checked.setId(Checked.checkedKidsArray.size());
+            checked.setChildId(childId);
+            checked.setCheckIn(hourFormat.format(date));
+            checked.setDate(dateFormat.format(date));
+            checked.setAllHours("0");
+            checked.setCheckOut("0");
 
-        Checked.checkedKidsArray.add(checked);
-        checked.checkedFileWriter(Checked.checkedKidsArray);
-        System.out.println(child.getFirstname() + " er indtjekket");
+            Checked.checkedKidsArray.add(checked);
+            checked.checkedFileWriter(Checked.checkedKidsArray);
+            System.out.println(child.getFirstname() + " er indtjekket");
+        } else{
+            System.out.println("ID eksisterer ikke. Prøv med et andet ID.");
+        }
     }
 
     public void checkOutChild()
@@ -44,23 +48,26 @@ public class StaffOptions
         SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
         System.out.println("Venligst indtast barnets ID");
         int childId = intScan.nextInt();
+        if (help.checkId(childId, true, false, false, false)){
+            Checked checked = help.getCheckedChild(childId);
+            String checkOut = hourFormat.format(date);
 
-        Checked checked = help.getCheckedChild(childId);
-        String checkOut = hourFormat.format(date);
+            int checkInHrs = splitTime(checked.getCheckIn(), true);
+            int checkInMins = splitTime(checked.getCheckIn(), false);
+            int checkOutHrs = splitTime(checkOut, true);
+            int checkOutMins = splitTime(checkOut, false);
+            int newHour = checkOutHrs - checkInHrs;
+            int newMins;
+            if (checkInMins > checkOutMins){ newMins = checkInMins - checkOutMins; }
+            else { newMins = checkOutMins - checkInMins; }
+            checked.setCheckOut(checkOut);
+            checked.setAllHours(newHour + ":" + newMins);
 
-        int checkInHrs = splitTime(checked.getCheckIn(), true);
-        int checkInMins = splitTime(checked.getCheckIn(), false);
-        int checkOutHrs = splitTime(checkOut, true);
-        int checkOutMins = splitTime(checkOut, false);
-        int newHour = checkOutHrs - checkInHrs;
-        int newMins;
-        if (checkInMins > checkOutMins){ newMins = checkInMins - checkOutMins; }
-        else { newMins = checkOutMins - checkInMins; }
-        checked.setCheckOut(checkOut);
-        checked.setAllHours(newHour + ":" + newMins);
-
-        checked.checkedFileWriter(Checked.checkedKidsArray);
-        System.out.println("Barn udtjekket.");
+            checked.checkedFileWriter(Checked.checkedKidsArray);
+            System.out.println("Barn udtjekket.");
+        } else {
+            System.out.println("ID eksisterer ikke. Prøv med et andet.");
+        }
     }
 
     public int splitTime(String time, boolean hour){

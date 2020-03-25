@@ -2,6 +2,7 @@ import Members.ChildOptions;
 import Members.Parent;
 import Members.ParentOptions;
 import News.NewsOptions;
+import Tools.HelpingMethods;
 import Tools.ScheduleOptions;
 import Tools.WaitlistOptions;
 import StaffMembers.StaffOptions;
@@ -20,6 +21,7 @@ public class Menu
     ScheduleOptions scheduleOptions = new ScheduleOptions();
     WaitlistOptions waitlistOptions = new WaitlistOptions();
     NewsOptions newsOptions = new NewsOptions();
+    HelpingMethods help = new HelpingMethods();
 
     public static int id = -1;
     Scanner scanner = new Scanner(System.in);
@@ -32,10 +34,20 @@ public class Menu
             System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre? \n3) Glemt ID?");
             int choice = scanner.nextInt();
             if (choice == 1){
-                login.staffLogin(id);
+                    boolean loggedIn = login.logIn(id);
+                    if (loggedIn) {
+                        Staff staff = help.getStaff(id);
+                        if (staff.getRole().equalsIgnoreCase("admin")) {
+                            adminOptions();
+                        } else {
+                            staffOptions(staff);
+                        }
+                    }
                 break;
             } else if (choice == 2){
-                login.parentLogin();
+                if (login.parentLogin() != null){
+                    options(login.parentLogin());
+                }
                 break;
             } else if (choice == 3) {
                 int id = login.forgottenIDStaff();

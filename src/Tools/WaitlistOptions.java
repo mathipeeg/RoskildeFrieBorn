@@ -17,17 +17,17 @@ public class WaitlistOptions {
         System.out.println("Indtast ID på barn der skal slettes");
         int id = intScan.nextInt();
         int childId = -1;
-        for (int i = 0; i < Waitlist.waitlistArray.size(); i++)
-        {
-            if (Waitlist.waitlistArray.get(i).getId() == id)
-            {
-                childId = Waitlist.waitlistArray.get(i).getId();
-            }
+        if (help.checkId(id, false, false, false, true)){
+            childId = id;
+        } else {
+            System.out.println("ID eksisterer ikke i database");
         }
-        int childIndex = help.getIndexChild(childId, Child.childArray);
-        Waitlist.waitlistArray.remove(childIndex);
-        waitlist.waitlistFileWriter(Waitlist.waitlistArray);
-        System.out.println("THE KID HAS BEEN ABO--- DELETED");
+        if (childId != -1) {
+            int childIndex = help.getIndexChild(childId, Child.childArray);
+            Waitlist.waitlistArray.remove(childIndex);
+            waitlist.waitlistFileWriter(Waitlist.waitlistArray);
+            System.out.println("THE KID HAS BEEN ABO--- DELETED");
+        }
     }
 
     public void createChildWaitlist()

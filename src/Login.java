@@ -9,31 +9,19 @@ import java.util.Scanner;
 public class Login {
 
     HelpingMethods get = new HelpingMethods();
-    Menu menu = new Menu();
     Scanner scanner = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
 
-    public void staffLogin(int id) throws ParseException {
-        boolean loggedIn = logIn(id);
-        if (loggedIn) {
-            Staff staff = get.getStaff(id);
-            if (staff.getRole().equalsIgnoreCase("admin")) {
-                menu.adminOptions();
-            } else {
-                menu.staffOptions(staff);
-            }
-        }
-    }
-
-    public void parentLogin() {
+    public Parent parentLogin() {
         System.out.println("Venligst indtast dit barns ID.");
         int id = scanner.nextInt();
         int checked = checkIdChild(id);
         if (checked == 1) {
             Parent parent = get.getParent(get.getChild(id).getParentId());
-            menu.options(parent);
+            return parent;
         } else{
             System.out.println("Beklager, dit ID eksisterer ikke.");
+            return null;
         }
     }
 

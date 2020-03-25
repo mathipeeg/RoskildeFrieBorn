@@ -83,7 +83,7 @@ public class Checked
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Organising/CheckedKids"));
+            input = new Scanner(new File("src/Tools/CheckedKids"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -130,7 +130,7 @@ public class Checked
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Organising/CheckedKids");
+            fileWriter = new FileWriter("src/Tools/CheckedKids");
             writeCheckedInfo(fileWriter, checkedKidsArray);
             fileWriter.close();
         } catch (IOException e)
