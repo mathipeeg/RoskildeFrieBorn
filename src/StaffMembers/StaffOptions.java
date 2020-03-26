@@ -25,7 +25,7 @@ public class StaffOptions
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-yyyy");
 
         int childId = intScan.nextInt();
-        if(help.checkId(childId, true, false, false, false)){
+        if(help.checkId(childId, "child")){
             Child child = help.getChild(childId);
             checked.setId(Checked.checkedKidsArray.size());
             checked.setChildId(childId);
@@ -48,7 +48,7 @@ public class StaffOptions
         SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
         System.out.println("Venligst indtast barnets ID");
         int childId = intScan.nextInt();
-        if (help.checkId(childId, true, false, false, false)){
+        if (help.checkId(childId, "child")){
             Checked checked = help.getCheckedChild(childId);
             String checkOut = hourFormat.format(date);
 

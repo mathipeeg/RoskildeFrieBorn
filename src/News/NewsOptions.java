@@ -44,7 +44,7 @@ public class NewsOptions {
     {
         System.out.println("Du har valgt at ændre nogle nyheder \nIndtast ID på nyheden, der skal ændres");
         int id = intScan.nextInt();
-        if (help.checkId(id, false, false, true, false)){
+        if (help.checkId(id, "news")){
             News news = help.getNews(id);
             System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
             int choice = intScan.nextInt();

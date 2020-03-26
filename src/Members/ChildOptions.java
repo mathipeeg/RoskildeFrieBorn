@@ -18,7 +18,7 @@ public class ChildOptions {
     {
         System.out.println("Lad os ændre et barn! \nIndtast ID på barn, der skal ændres");
         int id = intScan.nextInt();
-        if (help.checkId(id, true, false, false, false)) {
+        if (help.checkId(id, "child")) {
             Child child = help.getChild(id);
             System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID");
             int choice = intScan.nextInt();
@@ -49,7 +49,7 @@ public class ChildOptions {
     {
         System.out.println("Indtast ID på barn der skal slettes");
         int id = intScan.nextInt();
-        if (help.checkId(id, true, false, false, false)) {
+        if (help.checkId(id, "child")) {
             int parentId = -1;
             for (int i = 0; i < Child.childArray.size(); i++) {
                 if (Child.childArray.get(i).getId() == id) {

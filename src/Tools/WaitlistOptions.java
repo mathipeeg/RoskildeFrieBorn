@@ -17,7 +17,7 @@ public class WaitlistOptions {
         System.out.println("Indtast ID på barn der skal slettes");
         int id = intScan.nextInt();
         int childId = -1;
-        if (help.checkId(id, false, false, false, true)){
+        if (help.checkId(id, "waitlist")){
             childId = id;
         } else {
             System.out.println("ID eksisterer ikke i database");

@@ -174,32 +174,32 @@ public class HelpingMethods {
         }
     }
 
-    public boolean checkId(int id, boolean child, boolean parent, boolean news, boolean waitlist){
-        if (child){
-            for (Child kid :
+    public boolean checkId(int id, String object){
+        if (object.equalsIgnoreCase("child")){
+            for (Child child :
                     Child.childArray) {
-                if (kid.getId() == id) {
+                if (child.getId() == id) {
                     return true;
                 }
             }
-        } else if(parent) {
-            for (Parent adult :
+        } else if(object.equalsIgnoreCase("parent")) {
+            for (Parent parent :
                     Parent.parentArray) {
-                if (adult.getId() == id) {
+                if (parent.getId() == id) {
                     return true;
                 }
             }
-        } else if (news){
-            for (News newsElement :
+        } else if (object.equalsIgnoreCase("news")){
+            for (News news :
                     News.newsArray) {
-                if (newsElement.getId() == id){
+                if (news.getId() == id){
                     return true;
                 }
             }
-        } else if (waitlist) {
-            for (Waitlist waitlistElement :
+        } else if (object.equalsIgnoreCase("waitlist")) {
+            for (Waitlist waitlist :
                     Waitlist.waitlistArray) {
-                if (waitlistElement.getId() == id) {
+                if (waitlist.getId() == id) {
                     return true;
                 }
             }
