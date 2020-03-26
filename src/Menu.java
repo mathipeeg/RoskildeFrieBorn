@@ -23,7 +23,6 @@ public class Menu
     UpdatesOptions updatesOptions = new UpdatesOptions();
     HelpingMethods help = new HelpingMethods();
 
-    public static int id = -1;
     Scanner scanner = new Scanner(System.in);
     StaffOptions staffOptions = new StaffOptions();
     Login login = new Login();
@@ -34,8 +33,8 @@ public class Menu
             System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre? \n3) Glemt ID?");
             int choice = scanner.nextInt();
             if (choice == 1){
-                    boolean loggedIn = login.logIn(id);
-                    if (loggedIn) {
+                    int id = login.logIn();
+                    if (id != -1){
                         Staff staff = help.getStaff(id);
                         if (staff.getRole().equalsIgnoreCase("admin")) {
                             adminOptions();

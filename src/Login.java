@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 public class Login {
 
+    public static int id = -1;
+
     HelpingMethods get = new HelpingMethods();
     Scanner scanner = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
@@ -25,20 +27,20 @@ public class Login {
         }
     }
 
-    public boolean logIn(int id) {
+    public int logIn() {
         System.out.println("Venligst indtast dit ID.");
-        id = scanner.nextInt();
+        int id = scanner.nextInt();
         int checkId = checkIdStaff(id);
         if (checkId == 1){
             System.out.println("Indtast password.");
             String pass = s.nextLine();
             Staff staff = get.getStaff(id);
             if (staff.getPassword().equals(pass)) {
-                return true;
+                return id;
             }
         }
         System.out.println("Username or pass was wrong, sorry, man.");
-        return false;
+        return -1;
     }
 
     public int forgottenIDStaff()
