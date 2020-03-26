@@ -108,7 +108,7 @@ public class Menu
     public void options(Parent parent)
     {
         System.out.println("Velkommen " + parent.getFirstname() + "!");
-        System.out.println("Vil du \n1) Se nyheder \n2)Opret nyheder \n3)Ændr nyheder \n4) Ændr din information \n5) Afslut");
+        System.out.println("Vil du \n1) Se opdateringer \n2)Opret opdateringer \n3)Ændr opdateringer \n4) Ændr din information \n5) Afslut");
         int choice = scanner.nextInt();
         switch (choice){
             case 1:
@@ -132,14 +132,13 @@ public class Menu
     }
 
     public void newsOptions() {
-        System.out.println("Vil du \n1) Se nyheder \n2) Opret nyhder \n3) Ændre nyheder \n4) " +
-                "Slet nyheder \n5) Afslut");
+        System.out.println("Vil du \n1) Se opdateringer \n2) Opret opdateringer \n3) Ændre opdateringer \n4) " +
+                "Slet opdateringer \n5) Afslut");
         int choice = scanner.nextInt();
         switch (choice) {
             // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
             // TODO: Dato, publisher
             // TODO: stilling check
-
             case 1:
                 updatesOptions.seeUpdates();
                 break;
@@ -284,24 +283,26 @@ public class Menu
 
     }
     public void waitlistOptions() {
-        System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                waitlistOptions.getWaitlist();
-                break;
-            case 2:
-                waitlistOptions.createChildWaitlist();
-                break;
-            case 3:
-                waitlistOptions.abortChildFromWaitlist();
-                break;
-            case 4:
-                System.out.println("--------------------");
-                break;
-            default:
-                System.out.println("Not gonna happen");
-                break;
+        while (true) {
+            System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    waitlistOptions.getWaitlist();
+                    break;
+                case 2:
+                    waitlistOptions.createChildWaitlist();
+                    break;
+                case 3:
+                    waitlistOptions.abortChildFromWaitlist();
+                    break;
+                case 4:
+                    System.out.println("--------------------");
+                    break;
+                default:
+                    System.out.println("Not gonna happen");
+                    break;
+            }
         }
     }
 

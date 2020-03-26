@@ -43,6 +43,7 @@ public class UpdatesOptions {
     public void editUpdate()
     {
         System.out.println("Du har valgt at ændre nogle nyheder \nIndtast ID på nyheden, der skal ændres");
+        // TODO: 26-03-2020 Titel i stedet?
         int id = intScan.nextInt();
         if (help.checkId(id, "news")){
             Updates updates = help.getNews(id);
