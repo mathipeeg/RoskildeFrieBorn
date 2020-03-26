@@ -22,14 +22,9 @@ public class UpdatesOptions {
         System.out.println("Du har valgt at se opdateringer \n");
         for (int i = 0; i < Updates.updatesArray.size(); i++)
         {
-<<<<<<< HEAD
             System.out.println(Updates.updatesArray.get(i).getHeadLine());
             System.out.println(Updates.updatesArray.get(i).getDate());
             System.out.println("Af: " + Updates.updatesArray.get(i).getAuthor());
-=======
-            // TODO: 25-03-2020 Noget andet herinde?
-            System.out.println(Updates.updatesArray.get(i).getHeadLine());
->>>>>>> 517456c10ed6426c3c45faaa230c69cca7d84163
             System.out.println(Updates.updatesArray.get(i).getBody() + "\n");
             System.out.println("------------------------------------------------- \n");
         }
