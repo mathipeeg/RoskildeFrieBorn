@@ -17,6 +17,7 @@ public class StaffOptions
 
     public void checkChild()
     {
+        // TODO: 26-03-2020 Udskriv protokol
         System.out.println("Venligst indtast Barnets ID: ");
         Checked checked = new Checked();
         Date date = new Date();
