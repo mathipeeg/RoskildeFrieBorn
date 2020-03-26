@@ -14,12 +14,13 @@ public class UpdatesOptions {
 
     public void seeUpdates()
     {
+        System.out.println("Du har valgt at se opdateringer \n");
         for (int i = 0; i < Updates.updatesArray.size(); i++)
         {
             // TODO: 25-03-2020 Noget andet herinde?
-            System.out.println("Du har valgt at se opdateringer");
-            System.out.println("Virker det ?" + Updates.updatesArray.get(i).getHeadLine());
-            System.out.println(Updates.updatesArray.get(i).getBody());
+            System.out.println(Updates.updatesArray.get(i).getHeadLine());
+            System.out.println(Updates.updatesArray.get(i).getBody() + "\n");
+            System.out.println("------------------------------------------------- \n");
         }
     }
 

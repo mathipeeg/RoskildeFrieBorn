@@ -158,6 +158,7 @@ public class Menu
                 System.out.println("Not gonna happen");
                 break;
         }
+
     }
 
     public void staffOptions(Staff currentStaff) throws ParseException {
