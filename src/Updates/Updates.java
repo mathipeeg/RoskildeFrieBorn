@@ -13,12 +13,15 @@ public class Updates
     private int id;
     private String headLine;
     private String body;
+    private String date;
+    private String author;
 
-    public Updates(int id, String headLine, String body)
-    {
+    public Updates(int id, String headLine, String body, String date, String author) {
         this.id = id;
         this.headLine = headLine;
         this.body = body;
+        this.date = date;
+        this.author = author;
     }
 
     public Updates()
@@ -55,6 +58,22 @@ public class Updates
         this.body = body;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public ArrayList<Updates> initialiseInfo() {
         Scanner input = null;
         try
@@ -68,6 +87,8 @@ public class Updates
         int id = -1;
         String headLine = "";
         String body = "";
+        String date = "";
+        String author = "";
 
         while (input.hasNextLine()) {
             String[] lineArray = input.nextLine().split(": ");
@@ -75,15 +96,19 @@ public class Updates
             if (lineArray[0].equalsIgnoreCase("ID")) id = Integer.parseInt(lineArray[1]);
             if (lineArray[0].equalsIgnoreCase("Overskrift")) headLine = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("Indhold")) body = lineArray[1];
+            if (lineArray[0].equalsIgnoreCase("Dato")) date = lineArray[1];
+            if (lineArray[0].equalsIgnoreCase("Forfatter")) author = lineArray[1];
 
-            if (id != -1 && !headLine.equalsIgnoreCase("") && !body.equalsIgnoreCase(""))
+            if (id != -1 && !headLine.equalsIgnoreCase("") && !body.equalsIgnoreCase("") && !date.equalsIgnoreCase("") && !author.equalsIgnoreCase(""))
             {
-                Updates updates = new Updates(id, headLine, body);
+                Updates updates = new Updates(id, headLine, body, date, author);
                 updatesArray.add(updates);
 
                 id = -1;
                 headLine = "";
                 body = "";
+                date = "";
+                author = "";
             }
         }
         return updatesArray;
@@ -109,6 +134,8 @@ public class Updates
                 fileWriter.write("ID: " + updatesArray.get(i).getId()+ "\n");
                 fileWriter.write("Overskrift: " + updatesArray.get(i).getHeadLine() + "\n");
                 fileWriter.write("Indhold: " + updatesArray.get(i).getBody() + "\n");
+                fileWriter.write("Dato: " + updatesArray.get(i).getDate() + "\n");
+                fileWriter.write("Forfatter: " + updatesArray.get(i).getAuthor() + "\n");
 
             } catch (IOException e)
             {

@@ -6,12 +6,19 @@ Telefon: 93837474
 Adresse: Sandravej 93, 9999 By
 Stilling: Admin
 Password: Sandra123!
-
 ID: 1
 Fornavn: Morten
 Efternavn: Padsen
 E-mail: Padsen@gmail.com
-Telefon: 09876543
+Telefon: 9876543
 Adresse: Padsvej 93, 1000 Mortenby
 Stilling: Staff
 Password: Morten123!
+ID: 2
+Fornavn: Peter
+Efternavn: Larsen
+E-mail: peter@gmail.com
+Telefon: 1928374
+Adresse: Petervej 29, 3999 Byby
+Stilling: Staff
+Password: Peter123!

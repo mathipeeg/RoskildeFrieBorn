@@ -97,13 +97,23 @@ public class HelpingMethods {
         return null;
     }
 
-    public Updates getNews (int id)
+    public Updates getNews(int id)
     {
         for (int i = 0; i < Updates.updatesArray.size(); i++)
         {
             if (Updates.updatesArray.get(i).getId() == id)
             {
                 return Updates.updatesArray.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Updates getNews(String title){
+        for (Updates update :
+                Updates.updatesArray) {
+            if (update.getHeadLine().equalsIgnoreCase(title)) {
+                return update;
             }
         }
         return null;

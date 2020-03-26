@@ -90,9 +90,18 @@ public class StaffOptions
         System.out.println("Venligst indtast adresse");
         newStaff.setAddress(stringScan.nextLine());
         newStaff.setRole("Staff");
-        System.out.println("Venligst indtast password");
-        // TODO: 26-03-2020 dobbelttjek password
-        newStaff.setPassword(stringScan.nextLine());
+        while (true) {
+            System.out.println("Venligst indtast password");
+            String password1 = stringScan.nextLine();
+            System.out.println("Indtast password igen");
+            String password2 = stringScan.nextLine();
+            if (password1.equals(password2)) {
+                newStaff.setPassword(password1);
+                break;
+            } else {
+                System.out.println("Password matcher ikke.");
+            }
+        }
         Staff.staffArray.add(newStaff);
         staff.staffFileWriter(Staff.staffArray);
         System.out.println("Din medarbejder er blevet oprettet, tillykke");

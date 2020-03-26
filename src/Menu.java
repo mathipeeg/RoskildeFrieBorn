@@ -15,7 +15,6 @@ import java.util.Scanner;
 
 public class Menu
 {
-    // TODO: 22-03-2020 I hver abort metode, så erstat id med getIndex
     ParentOptions parentOptions = new ParentOptions();
     ChildOptions childOptions = new ChildOptions();
     ScheduleOptions scheduleOptions = new ScheduleOptions();
@@ -26,15 +25,15 @@ public class Menu
     Scanner scanner = new Scanner(System.in);
     StaffOptions staffOptions = new StaffOptions();
     Login login = new Login();
-
+    public static int id = -1;
 
     public void menu() throws ParseException {
         while (true) {
             System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre? \n3) Glemt ID?");
             int choice = scanner.nextInt();
             if (choice == 1){
-                    int id = login.logIn();
-                    if (id != -1){
+                id = login.logIn();
+                if (id != -1){
                         Staff staff = help.getStaff(id);
                         if (staff.getRole().equalsIgnoreCase("admin")) {
                             adminOptions();
@@ -44,8 +43,9 @@ public class Menu
                     }
                 break;
             } else if (choice == 2){
-                if (login.parentLogin() != null){
-                    options(login.parentLogin());
+                Parent parent = login.parentLogin();
+                if (parent != null){
+                    options(parent);
                 }
                 break;
             } else if (choice == 3) {
@@ -108,7 +108,7 @@ public class Menu
     public void options(Parent parent)
     {
         System.out.println("Velkommen " + parent.getFirstname() + "!");
-        System.out.println("Vil du \n1) Se opdateringer \n2)Opret opdateringer \n3)Ændr opdateringer \n4) Ændr din information \n5) Afslut");
+        System.out.println("Vil du \n1) Se opdateringer \n2) Opret opdateringer \n3) Ændr opdateringer \n4) Ændr din information \n5) Afslut");
         int choice = scanner.nextInt();
         switch (choice){
             case 1:
@@ -136,9 +136,6 @@ public class Menu
                 "Slet opdateringer \n5) Afslut");
         int choice = scanner.nextInt();
         switch (choice) {
-            // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
-            // TODO: Dato, publisher
-            // TODO: stilling check
             case 1:
                 updatesOptions.seeUpdates();
                 break;

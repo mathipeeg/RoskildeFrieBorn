@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class Login {
 
-    public static int id = -1;
 
     HelpingMethods get = new HelpingMethods();
     Scanner scanner = new Scanner(System.in);

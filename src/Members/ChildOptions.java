@@ -56,8 +56,10 @@ public class ChildOptions {
                     parentId = Child.childArray.get(i).getParentId();
                 }
             }
-            Child.childArray.remove(id);
-            Parent.parentArray.remove(parentId);
+            int iChild = help.getIndexChild(id, Child.childArray);
+            int iParent = help.getIndexParent(parentId, Parent.parentArray);
+            Child.childArray.remove(iChild);
+            Parent.parentArray.remove(iParent);
             child.childFileWriter(Child.childArray);
             parent.parentFileWriter(Parent.parentArray);
             System.out.println("YOUR KID HAS BEEN ABO--- DELETED");
