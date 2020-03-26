@@ -1,4 +1,4 @@
-package Tools;
+package Main.Models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -132,7 +132,7 @@ public class Waitlist
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Tools/Waitlist"));
+            input = new Scanner(new File("src/Main/Tools/Waitlist"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -189,7 +189,7 @@ public class Waitlist
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Tools/Waitlist");
+            fileWriter = new FileWriter("src/Main/Tools/Waitlist");
             writeWaitlistInfo(fileWriter, waitlistArray);
             fileWriter.close();
         } catch (IOException e)

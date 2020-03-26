@@ -1,17 +1,15 @@
-import Members.ChildOptions;
-import Members.Parent;
-import Members.ParentOptions;
-import Updates.UpdatesOptions;
-import Tools.HelpingMethods;
-import Tools.ScheduleOptions;
-import Tools.WaitlistOptions;
-import StaffMembers.StaffOptions;
-import StaffMembers.Staff;
+package Main;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
+import Main.Members.*;
+import Main.Models.*;
+import Main.Tools.HelpingMethods;
+import Main.Tools.ScheduleOptions;
+import Main.Tools.WaitlistOptions;
+import Main.Updates.UpdatesOptions;
+import Main.StaffMembers.*;
+
+import java.text.*;
+import java.util.*;
 
 public class Menu
 {
@@ -25,39 +23,31 @@ public class Menu
     Scanner scanner = new Scanner(System.in);
     StaffOptions staffOptions = new StaffOptions();
     Login login = new Login();
-    public static int id = -1;
+    public static CurrentUser CURRENTUSER = null;
 
     public void menu() throws ParseException {
         while (true) {
-            System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre? \n3) Glemt ID?");
+            System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre?");
             int choice = scanner.nextInt();
             if (choice == 1){
-                id = login.logIn();
-                if (id != -1){
-                        Staff staff = help.getStaff(id);
+                CURRENTUSER = login.logIn();
+                if (CURRENTUSER != null){
+                        Staff staff = help.getStaff(CURRENTUSER.id);
                         if (staff.getRole().equalsIgnoreCase("admin")) {
                             adminOptions();
                         } else {
                             staffOptions(staff);
                         }
                     }
-                break;
             } else if (choice == 2){
-                Parent parent = login.parentLogin();
-                if (parent != null){
-                    options(parent);
-                }
-                break;
-            } else if (choice == 3) {
-                int id = login.forgottenIDStaff();
-                if (id != -1) {
-                    System.out.println("Dit ID er: " + id);
-                } else {
-                    System.out.println("Kunne ikke finde dit navn i systemet, prøv igen.");
+                CURRENTUSER = login.parentLogin();
+                if (CURRENTUSER != null){
+                    options();
                 }
             }else {
                 System.out.println("Mærkeligt input alligevel...");
             }
+            break;
         }
     }
 
@@ -105,9 +95,9 @@ public class Menu
         }
     }
 
-    public void options(Parent parent)
+    public void options()
     {
-        System.out.println("Velkommen " + parent.getFirstname() + "!");
+        System.out.println("Velkommen " + CURRENTUSER.firstname + "!");
         System.out.println("Vil du \n1) Se opdateringer \n2) Opret opdateringer \n3) Ændr opdateringer \n4) Ændr din information \n5) Afslut");
         int choice = scanner.nextInt();
         switch (choice){
@@ -121,10 +111,10 @@ public class Menu
                 updatesOptions.editUpdate();
                 break;
             case 4:
-                parentOptions.editParent(parent.getId());
+                parentOptions.editParent(CURRENTUSER.id);
                 break;
             case 5:
-                System.out.println("---------------------");
+                System.out.println("----------------------");
                 break;
             default:
                 break;
@@ -149,6 +139,7 @@ public class Menu
                 updatesOptions.deleteUpdate();
                 break;
             case 5:
+                System.out.println("----------------------");
                 break;
             default:
                 System.out.println("Not gonna happen");
@@ -180,7 +171,7 @@ public class Menu
                 checkedInOut();
                 break;
             case 6:
-                System.out.println("Exit");
+                System.out.println("----------------------");
                 break;
             default:
                 System.out.println("lmao");
@@ -190,23 +181,24 @@ public class Menu
 
     public void parentOptions() {
 
-        while (true){
-            System.out.println("1) Ny forældre \n2) Aendre forældre \n3) Slet forældre");
-            int choice = scanner.nextInt();
-            switch (choice){
-                case 1:
-                    parentOptions.createParent();
-                    break;
-                case 2:
-                    parentOptions.editParent(-1);
-                    break;
-                case 3:
-                    parentOptions.abortParent();
-                    break;
-                default:
-                    System.out.println("Mærkeligt input alligevel lmao");
-                    break;
-            }
+        System.out.println("1) Ny forældre \n2) Aendre forældre \n3) Slet forældre \n4) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice){
+            case 1:
+                parentOptions.createParent();
+                break;
+            case 2:
+                parentOptions.editParent(-1);
+                break;
+            case 3:
+                parentOptions.abortParent();
+                break;
+            case 4:
+                System.out.println("----------------------");
+                break;
+            default:
+                System.out.println("Mærkeligt input alligevel lmao");
+                break;
         }
     }
 
@@ -216,7 +208,7 @@ public class Menu
         String currentMonthString = monthFormat.format(date);
 
         while (true) {
-            System.out.println("\nVil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
+            System.out.println("Vil du \n1) Se timeplan for denne måned \n2) Opret vagter for næste tomme måned \n3) Afslut");
             int choice = scanner.nextInt();
             if (choice == 1) {
                 scheduleOptions.viewTimetable(currentMonthString);
@@ -225,6 +217,7 @@ public class Menu
                 scheduleOptions.createShift(emptyMonth);
                 scheduleOptions.viewTimetable(emptyMonth);
             } else if (choice == 3) {
+                System.out.println("----------------------");
                 break;
             } else{
                 System.out.println("Forstod ikke lige dit input...");
@@ -234,25 +227,25 @@ public class Menu
 
     public void childOptions()
     {
-        while (true)
+        System.out.println("1) Nyt barn \n2) Aendre barn \n3) Slet barn \n4) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice)
         {
-            System.out.println("1) Nyt barn \n2) Aendre barn \n3) Slet barn");
-            int choice = scanner.nextInt();
-            switch (choice)
-            {
-                case 1:
-                    childOptions.createChild();
-                    break;
-                case 2:
-                    childOptions.editChild();
-                    break;
-                case 3:
-                    childOptions.abortChild();
-                    break;
-                default:
-                    System.out.println("Mærkeligt input alligevel lmao");
-                    break;
-            }
+            case 1:
+                childOptions.createChild();
+                break;
+            case 2:
+                childOptions.editChild();
+                break;
+            case 3:
+                childOptions.abortChild();
+                break;
+            case 4:
+                System.out.println("----------------------");
+                break;
+            default:
+                System.out.println("Mærkeligt input alligevel lmao");
+                break;
         }
     }
 
@@ -271,7 +264,7 @@ public class Menu
                 staffOptions.deleteStaff();
                 break;
             case 4:
-                System.out.println("----------------------");
+                System.out.println("-----------------------");
                 break;
             default:
                 System.out.println("Not gonna happen");
@@ -280,31 +273,36 @@ public class Menu
 
     }
     public void waitlistOptions() {
-        while (true) {
-            System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    waitlistOptions.getWaitlist();
-                    break;
-                case 2:
-                    waitlistOptions.createChildWaitlist();
-                    break;
-                case 3:
-                    waitlistOptions.abortChildFromWaitlist();
-                    break;
-                case 4:
-                    System.out.println("--------------------");
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
+        System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                waitlistOptions.getWaitlist();
+                break;
+            case 2:
+                waitlistOptions.createChildWaitlist();
+                break;
+            case 3:
+                waitlistOptions.abortChildFromWaitlist();
+                break;
+            case 4:
+                System.out.println("---------------------");
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
         }
     }
 
     public void checkedInOut() throws ParseException {
-        System.out.println("1)Indskriv barn \n2)Udtjek barn \n3)Afslut");
+
+        for (Checked checked : Checked.checkedKidsArray) {
+            if (checked.getCheckOut().equalsIgnoreCase("0")){
+                Child child = help.getChild(checked.getChildId());
+                System.out.println(child.getFirstname() + " " + child.getLastname() + " ✓");
+            }
+        }
+        System.out.println("\n1) Indskriv barn \n2) Udtjek barn \n3) Afslut");
 
         int choice = scanner.nextInt();
         switch (choice)
@@ -316,7 +314,7 @@ public class Menu
                 staffOptions.checkOutChild();
                 break;
             case 3:
-                System.out.println("---------------------");
+                System.out.println("----------------------");
                 break;
             default:
                 System.out.println("Underligt input...");

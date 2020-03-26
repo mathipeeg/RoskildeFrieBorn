@@ -1,4 +1,4 @@
-package Members;
+package Main.Models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,42 +7,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Parent
+public class Staff
 {
-    public static ArrayList<Parent> parentArray = new ArrayList<>();
+    public static ArrayList<Staff> staffArray = new ArrayList<>();
     private int id;
     private String firstname;
     private String lastname;
     private String email;
     private int phone;
-    private String account;
     private String address;
     private String role;
+    private String password;
 
-    public Parent(int id, String firstname, String lastname, String email, int phone, String account, String address, String role)
+    public Staff(int id, String firstname, String lastname, String email, int phone, String address, String role, String password)
     {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.phone = phone;
-        this.account = account;
         this.address = address;
         this.role = role;
+        this.password = password;
     }
 
-    public Parent()
+    public Staff()
     {
-    }
-
-    public static ArrayList<Parent> getParentArray()
-    {
-        return parentArray;
-    }
-
-    public static void setParentArray(ArrayList<Parent> parentArray)
-    {
-        Parent.parentArray = parentArray;
     }
 
     public int getId()
@@ -95,16 +85,6 @@ public class Parent
         this.phone = phone;
     }
 
-    public String getAccount()
-    {
-        return account;
-    }
-
-    public void setAccount(String account)
-    {
-        this.account = account;
-    }
-
     public String getAddress()
     {
         return address;
@@ -125,29 +105,36 @@ public class Parent
         this.role = role;
     }
 
-    public ArrayList<Parent> initialiseInfo()
+    public String getPassword()
     {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    public ArrayList<Staff> initialiseInfo() {
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Members/Parents"));
+            input = new Scanner(new File("src/Main/StaffMembers/Staff"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
-
 
         int id = -1;
         String firstname = "";
         String lastname = "";
         String email = "";
         int phone = -1;
-        String account = "";
         String address = "";
         String role = "";
+        String password = "";
 
-        while (input.hasNextLine())
-        {
+        while (input.hasNextLine()) {
             String[] lineArray = input.nextLine().split(": ");
 
             if (lineArray[0].equalsIgnoreCase("ID")) id = Integer.parseInt(lineArray[1]);
@@ -155,36 +142,36 @@ public class Parent
             if (lineArray[0].equalsIgnoreCase("Efternavn")) lastname = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("E-mail")) email = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("Telefon")) phone = Integer.parseInt(lineArray[1]);
-            if (lineArray[0].equalsIgnoreCase("Konto nr.")) account = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("Adresse")) address = lineArray[1];
             if (lineArray[0].equalsIgnoreCase("Stilling")) role = lineArray[1];
+            if (lineArray[0].equalsIgnoreCase("Password")) password = lineArray[1];
 
             if (id != -1 && !firstname.equalsIgnoreCase("") && !lastname.equalsIgnoreCase("")
-                    && !email.equalsIgnoreCase("") && phone != -1 && !account.equalsIgnoreCase("") && !address.equalsIgnoreCase("")
-                    && !role.equalsIgnoreCase(""))
+                    && !email.equalsIgnoreCase("") && phone != -1 && !address.equalsIgnoreCase("")
+                    && !role.equalsIgnoreCase("") && !password.equalsIgnoreCase(""))
             {
-                Parent parent = new Parent(id, firstname, lastname, email, phone, account, address, role);
-                parentArray.add(parent);
+                Staff staff = new Staff(id, firstname, lastname, email, phone, address, role, password);
+                staffArray.add(staff);
 
                 id = -1;
                 firstname = "";
                 lastname = "";
                 email = "";
                 phone = -1;
-                account = "";
                 address = "";
                 role = "";
+                password = "";
             }
         }
-        return parentArray;
+        return staffArray;
     }
 
-    public void parentFileWriter(ArrayList<Parent> parentArray){
+    public void staffFileWriter(ArrayList<Staff> staffArray){
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Members/Parents");
-            writeParentInfo(fileWriter, parentArray);
+            fileWriter = new FileWriter("src/Main/StaffMembers/Staff");
+            writeStaffInfo(fileWriter, staffArray);
             fileWriter.close();
         } catch (IOException e)
         {
@@ -192,18 +179,18 @@ public class Parent
         }
     }
 
-    public void writeParentInfo(FileWriter fileWriter, ArrayList<Parent> parentArray){
-        for (int i = 0; i < parentArray.size(); i++){
+    public void writeStaffInfo(FileWriter fileWriter, ArrayList<Staff> staffArray){
+        for (int i = 0; i < staffArray.size(); i++){
             try
             {
-                fileWriter.write("ID: " + parentArray.get(i).getId() + "\n");
-                fileWriter.write("Fornavn: " + parentArray.get(i).getFirstname() + "\n");
-                fileWriter.write("Efternavn: " + parentArray.get(i).getLastname() + "\n");
-                fileWriter.write("E-mail: " + parentArray.get(i).getEmail() + "\n");
-                fileWriter.write("Telefon: " + parentArray.get(i).getPhone() + "\n");
-                fileWriter.write("Konto nr.: " + parentArray.get(i).getAccount() + "\n");
-                fileWriter.write("Adresse: " + parentArray.get(i).getAddress() + "\n");
-                fileWriter.write("Stilling: " + parentArray.get(i).getRole() + "\n");
+                fileWriter.write("ID: " + staffArray.get(i).getId()+ "\n");
+                fileWriter.write("Fornavn: " + staffArray.get(i).getFirstname() + "\n");
+                fileWriter.write("Efternavn: " + staffArray.get(i).getLastname() + "\n");
+                fileWriter.write("E-mail: " + staffArray.get(i).getEmail() + "\n");
+                fileWriter.write("Telefon: " + staffArray.get(i).getPhone() + "\n");
+                fileWriter.write("Adresse: " + staffArray.get(i).getAddress() + "\n");
+                fileWriter.write("Stilling: " + staffArray.get(i).getRole() + "\n");
+                fileWriter.write("Password: " + staffArray.get(i).getPassword() + "\n");
             } catch (IOException e)
             {
                 e.printStackTrace();

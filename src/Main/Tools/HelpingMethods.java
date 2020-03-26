@@ -1,15 +1,10 @@
-package Tools;
+package Main.Tools;
 
-import Members.Child;
-import Members.Parent;
-import Updates.Updates;
-import StaffMembers.Staff;
+import Main.Models.*;
+import Main.Models.Updates;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
+import java.text.*;
+import java.util.*;
 
 public class HelpingMethods {
 

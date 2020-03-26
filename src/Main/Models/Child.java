@@ -1,6 +1,5 @@
-package Members;
+package Main.Models;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -85,7 +84,7 @@ public class Child
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Members/Children"));
+            input = new Scanner(new File("src/Main/Members/Children"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -128,7 +127,7 @@ public class Child
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Members/Children");
+            fileWriter = new FileWriter("src/Main/Members/Children");
             writeChildInfo(fileWriter, childArray);
             fileWriter.close();
         } catch (IOException e)

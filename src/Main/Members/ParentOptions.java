@@ -1,6 +1,8 @@
-package Members;
+package Main.Members;
 
-import Tools.HelpingMethods;
+import Main.Models.Child;
+import Main.Models.Parent;
+import Main.Tools.HelpingMethods;
 
 import java.util.Scanner;
 

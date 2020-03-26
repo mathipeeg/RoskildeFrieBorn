@@ -1,8 +1,13 @@
-import Members.Child;
-import Members.Parent;
-import Updates.Updates;
-import Tools.*;
-import StaffMembers.Staff;
+package Main;
+
+import Main.Models.Child;
+import Main.Models.Parent;
+import Main.Models.Checked;
+import Main.Tools.HelpingMethods;
+import Main.Models.Schedule;
+import Main.Models.Waitlist;
+import Main.Models.Updates;
+import Main.Models.Staff;
 
 public class Controller {
 

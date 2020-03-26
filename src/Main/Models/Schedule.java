@@ -1,4 +1,4 @@
-package Tools;
+package Main.Models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,7 +94,7 @@ public class Schedule
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Tools/Schedule"));
+            input = new Scanner(new File("src/Main/Tools/Schedule"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class Schedule
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Tools/Schedule");
+            fileWriter = new FileWriter("src/Main/Tools/Schedule");
             writeScheduleInfo(fileWriter, scheduleArray);
             fileWriter.close();
         } catch (IOException e)

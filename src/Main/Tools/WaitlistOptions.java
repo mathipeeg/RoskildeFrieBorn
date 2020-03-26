@@ -1,6 +1,7 @@
-package Tools;
+package Main.Tools;
 
-import Members.Child;
+import Main.Models.Child;
+import Main.Models.Waitlist;
 
 import java.util.Scanner;
 
@@ -62,13 +63,12 @@ public class WaitlistOptions {
             System.out.println("Barnets navn: " + Waitlist.waitlistArray.get(i).getChildFirstname() +
                     " " + Waitlist.waitlistArray.get(i).getChildLastname());
             System.out.println("Foedsels dato (DD/MM-YYYY): " + Waitlist.waitlistArray.get(i).getBirthdate());
-            System.out.println("-------------------------------------------------");
             System.out.println("Foraeldre navn: " + Waitlist.waitlistArray.get(i).getParentFirstname() +
                     " " + Waitlist.waitlistArray.get(i).getParentLastname());
             System.out.println(" Tlf.: " + Waitlist.waitlistArray.get(i).getPhone() +
                     " Adresse: " + Waitlist.waitlistArray.get(i).getAddress());
             System.out.println("E-mail: " + Waitlist.waitlistArray.get(i).getEmail());
-            System.out.println();
+            System.out.println("\n-------------------------------------------------\n");
         }
     }
 }

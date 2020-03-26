@@ -1,6 +1,7 @@
-package Tools;
+package Main.Tools;
 
-import StaffMembers.Staff;
+import Main.Models.Schedule;
+import Main.Models.Staff;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,15 +92,14 @@ public class ScheduleOptions {
             if (monthi.equalsIgnoreCase(month)){
                 Staff staff = help.getStaff(schedule.getId());
                 if(!temp.equalsIgnoreCase(splitMe(schedule, true))){
-                    System.out.println("\n");
-                    System.out.println("Dato : " + schedule.getDate());
+                    System.out.println("\nDato : " + schedule.getDate());
                 }
                 System.out.println(staff.getFirstname());
                 System.out.println("Tid: " +  schedule.getTime());
                 temp = splitMe(schedule, true);
             }
         }
-        System.out.println("Vil du oprette en ny vagt? \n 1) Ja 2) Nej");
+        System.out.println("\nVil du oprette en ny vagt? \n 1) Ja 2) Nej");
         int choice = intScan.nextInt();
         if (choice == 1){
             createShift(month);

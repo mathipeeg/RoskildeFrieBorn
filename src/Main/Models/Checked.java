@@ -1,4 +1,4 @@
-package Tools;
+package Main.Models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,7 +83,7 @@ public class Checked
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Tools/CheckedKids"));
+            input = new Scanner(new File("src/Main/Tools/CheckedKids"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -130,7 +130,7 @@ public class Checked
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Tools/CheckedKids");
+            fileWriter = new FileWriter("src/Main/Tools/CheckedKids");
             writeCheckedInfo(fileWriter, checkedKidsArray);
             fileWriter.close();
         } catch (IOException e)

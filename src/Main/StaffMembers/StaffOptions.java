@@ -1,8 +1,9 @@
-package StaffMembers;
+package Main.StaffMembers;
 
-import Members.Child;
-import Tools.*;
-
+import Main.Models.Child;
+import Main.Models.Staff;
+import Main.Models.Checked;
+import Main.Tools.HelpingMethods;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -17,7 +18,6 @@ public class StaffOptions
 
     public void checkChild()
     {
-        // TODO: 26-03-2020 Udskriv protokol
         System.out.println("Venligst indtast Barnets ID: ");
         Checked checked = new Checked();
         Date date = new Date();

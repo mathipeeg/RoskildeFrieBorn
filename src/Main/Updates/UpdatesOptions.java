@@ -1,16 +1,17 @@
-package Updates;
+package Main.Updates;
 
-import Members.Parent;
-import StaffMembers.Staff;
-import Tools.HelpingMethods;
+import Main.Models.Parent;
+import Main.Menu;
+import Main.Models.Staff;
+import Main.Models.Updates;
+import Main.Tools.HelpingMethods;
+import org.springframework.beans.propertyeditors.CurrencyEditor;
 
-import java.awt.*;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class UpdatesOptions {
-
     Updates updates = new Updates();
     
     HelpingMethods help = new HelpingMethods();
@@ -39,32 +40,17 @@ public class UpdatesOptions {
 
         System.out.println("Du har valgt at oprette nye opdateringer");
         Updates newUpdate = new Updates();
-        String name = getName();
         newUpdate.setId(Updates.updatesArray.size());
         System.out.println("Venlig indtast en overskrift");
         newUpdate.setHeadLine(stringScan.nextLine());
         System.out.println("Skriv noget indhold");
         newUpdate.setBody(stringScan.nextLine());
-        newUpdate.setAuthor(name);
+        newUpdate.setAuthor(Menu.CURRENTUSER.firstname + " " + Menu.CURRENTUSER.lastname);
         newUpdate.setDate(currentDate);
 
         Updates.updatesArray.add(newUpdate);
         updates.newsFileWriter(Updates.updatesArray);
         System.out.println("Din opdatering er lavet, TILLYKKE!");
-    }
-
-    public String getName() {
-        // TODO: 26-03-2020 få id til at være det static og find rolle
-        System.out.println("Indtast dit (eller dit barns )ID");
-        int id = intScan.nextInt();
-        System.out.println("er du 1) Forældre 2) Medarbejder?");
-        if (intScan.nextInt() == 1){
-            Parent parent = help.getParent(help.getChild(id).getParentId());
-            return parent.getFirstname() + " " + parent.getLastname();
-        } else {
-            Staff staff = help.getStaff(id);
-            return staff.getFirstname() + " " + staff.getLastname();
-        }
     }
 
     public void editUpdate()
@@ -92,8 +78,7 @@ public class UpdatesOptions {
                             updates.setBody(stringScan.nextLine());
                             break;
                         case 3:
-                            // TODO: 26-03-2020 Find ud af hvorfor den afslutter helt ???
-                            System.out.println("Afslut");
+                            System.out.println("-----------------------");
                             break;
                     }
                     updates.newsFileWriter(Updates.updatesArray);

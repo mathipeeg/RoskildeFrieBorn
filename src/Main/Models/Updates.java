@@ -1,4 +1,4 @@
-package Updates;
+package Main.Models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,7 +78,7 @@ public class Updates
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/Updates/Updates"));
+            input = new Scanner(new File("src/Main/Updates/Updates"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -118,7 +118,7 @@ public class Updates
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/Updates/Updates");
+            fileWriter = new FileWriter("src/Main/Updates/Updates");
             writeNewsInfo(fileWriter, updatesArray);
             fileWriter.close();
         } catch (IOException e)
