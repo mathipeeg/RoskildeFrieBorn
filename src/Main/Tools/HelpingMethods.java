@@ -92,7 +92,7 @@ public class HelpingMethods {
         return null;
     }
 
-    public Updates getNews(int id)
+    public Updates getUpdates(int id)
     {
         for (int i = 0; i < Updates.updatesArray.size(); i++)
         {
@@ -104,7 +104,7 @@ public class HelpingMethods {
         return null;
     }
 
-    public Updates getNews(String title){
+    public Updates getUpdates(String title){
         for (Updates update :
                 Updates.updatesArray) {
             if (update.getHeadLine().equalsIgnoreCase(title)) {
@@ -114,7 +114,7 @@ public class HelpingMethods {
         return null;
     }
 
-    public int getIndexNews(int id, ArrayList<Updates> array){
+    public int getIndexUpdates(int id, ArrayList<Updates> array){
         for (int i = 0; i < array.size(); i++) {
             if (array.get(i).getId() == id){
                 return i;
@@ -194,7 +194,7 @@ public class HelpingMethods {
                     return true;
                 }
             }
-        } else if (object.equalsIgnoreCase("news")){
+        } else if (object.equalsIgnoreCase("updates")){
             for (Updates updates :
                     Updates.updatesArray) {
                 if (updates.getId() == id){

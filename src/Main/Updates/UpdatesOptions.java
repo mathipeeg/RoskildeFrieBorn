@@ -1,11 +1,8 @@
 package Main.Updates;
 
-import Main.Models.Parent;
 import Main.Menu;
-import Main.Models.Staff;
 import Main.Models.Updates;
 import Main.Tools.HelpingMethods;
-import org.springframework.beans.propertyeditors.CurrencyEditor;
 
 
 import java.text.SimpleDateFormat;
@@ -49,7 +46,7 @@ public class UpdatesOptions {
         newUpdate.setDate(currentDate);
 
         Updates.updatesArray.add(newUpdate);
-        updates.newsFileWriter(Updates.updatesArray);
+        updates.updateFileWriter(Updates.updatesArray);
         System.out.println("Din opdatering er lavet, TILLYKKE!");
     }
 
@@ -62,10 +59,10 @@ public class UpdatesOptions {
             if (title.equalsIgnoreCase("afslut")){
                 break;
             }
-            if (help.getNews(title) != null) {
-                int id = help.getNews(title).getId();
-                if (help.checkId(id, "news")) {
-                    Updates updates = help.getNews(id);
+            if (help.getUpdates(title) != null) {
+                int id = help.getUpdates(title).getId();
+                if (help.checkId(id, "updates")) {
+                    Updates updates = help.getUpdates(id);
                     System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
                     choice = intScan.nextInt();
                     switch (choice) {
@@ -81,7 +78,7 @@ public class UpdatesOptions {
                             System.out.println("-----------------------");
                             break;
                     }
-                    updates.newsFileWriter(Updates.updatesArray);
+                    updates.updateFileWriter(Updates.updatesArray);
                 } else {
                     System.out.println("ID eksisterer ikke. Prøv med et andet.");
                 }
@@ -95,10 +92,10 @@ public class UpdatesOptions {
     {
         System.out.println("Indtast titel på opdatering der skal slettes");
         String title = stringScan.nextLine();
-        int id = help.getNews(title).getId();
-        int newsIndex = help.getIndexNews(id, Updates.updatesArray);
-        Updates.updatesArray.remove(newsIndex);
-        updates.newsFileWriter(Updates.updatesArray);
+        int id = help.getUpdates(title).getId();
+        int updateIndex = help.getIndexUpdates(id, Updates.updatesArray);
+        Updates.updatesArray.remove(updateIndex);
+        updates.updateFileWriter(Updates.updatesArray);
         System.out.println("Opdatering er nu slettet");
     }
 }

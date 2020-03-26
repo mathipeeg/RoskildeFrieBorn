@@ -60,7 +60,7 @@ public class Menu
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                    newsOptions();
+                    updatesOptions();
                     //Malene og Mads
                     break;
                 case 2:
@@ -121,7 +121,7 @@ public class Menu
         }
     }
 
-    public void newsOptions() {
+    public void updatesOptions() {
         System.out.println("Vil du \n1) Se opdateringer \n2) Opret opdateringer \n3) Ændre opdateringer \n4) " +
                 "Slet opdateringer \n5) Afslut");
         int choice = scanner.nextInt();
@@ -156,7 +156,7 @@ public class Menu
         switch (choice)
         {
             case 1:
-                newsOptions();
+                updatesOptions();
                 break;
             case 2:
                 timetableOptions();

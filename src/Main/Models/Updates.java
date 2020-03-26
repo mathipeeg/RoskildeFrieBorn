@@ -114,12 +114,12 @@ public class Updates
         return updatesArray;
     }
 
-    public void newsFileWriter(ArrayList<Updates> updatesArray){
+    public void updateFileWriter(ArrayList<Updates> updatesArray){
         FileWriter fileWriter;
         try
         {
             fileWriter = new FileWriter("src/Main/Updates/Updates");
-            writeNewsInfo(fileWriter, updatesArray);
+            writeUpdatesInfo(fileWriter, updatesArray);
             fileWriter.close();
         } catch (IOException e)
         {
@@ -127,7 +127,7 @@ public class Updates
         }
     }
 
-    public void writeNewsInfo(FileWriter fileWriter, ArrayList<Updates> updatesArray){
+    public void writeUpdatesInfo(FileWriter fileWriter, ArrayList<Updates> updatesArray){
         for (int i = 0; i < updatesArray.size(); i++){
             try
             {
