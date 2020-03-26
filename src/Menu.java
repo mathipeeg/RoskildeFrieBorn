@@ -132,31 +132,32 @@ public class Menu
     }
 
     public void newsOptions() {
-        System.out.println("Vil du \n1) Se nyheder \n2) Opret nyhder \n3) Ændre nyheder \n4) " +
-                "Slet nyheder \n5) Afslut");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
-            // TODO: Dato, publisher
-            // TODO: stilling check
-
-            case 1:
-                updatesOptions.seeUpdates();
-                break;
-            case 2:
-                updatesOptions.createUpdates();
-                break;
-            case 3:
-                updatesOptions.editUpdate();
-                break;
-            case 4:
-                updatesOptions.deleteUpdate();
-                break;
-            case 5:
-                break;
-            default:
-                System.out.println("Not gonna happen");
-                break;
+        while (true) {
+            System.out.println("Vil du \n1) Se nyheder \n2) Opret nyhder \n3) Ændre nyheder \n4) " +
+                    "Slet nyheder \n5) Afslut");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
+                // TODO: Dato, publisher
+                // TODO: stilling check
+                case 1:
+                    updatesOptions.seeUpdates();
+                    break;
+                case 2:
+                    updatesOptions.createUpdates();
+                    break;
+                case 3:
+                    updatesOptions.editUpdate();
+                    break;
+                case 4:
+                    updatesOptions.deleteUpdate();
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Not gonna happen");
+                    break;
+            }
         }
     }
 
@@ -283,24 +284,26 @@ public class Menu
 
     }
     public void waitlistOptions() {
-        System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                waitlistOptions.getWaitlist();
-                break;
-            case 2:
-                waitlistOptions.createChildWaitlist();
-                break;
-            case 3:
-                waitlistOptions.abortChildFromWaitlist();
-                break;
-            case 4:
-                System.out.println("--------------------");
-                break;
-            default:
-                System.out.println("Not gonna happen");
-                break;
+        while (true) {
+            System.out.println("1) Se venteliste \n2) Opret barn på venteliste \n3) Slet barn fra venteliste \n4) Afslut");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    waitlistOptions.getWaitlist();
+                    break;
+                case 2:
+                    waitlistOptions.createChildWaitlist();
+                    break;
+                case 3:
+                    waitlistOptions.abortChildFromWaitlist();
+                    break;
+                case 4:
+                    System.out.println("--------------------");
+                    break;
+                default:
+                    System.out.println("Not gonna happen");
+                    break;
+            }
         }
     }
 
