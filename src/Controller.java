@@ -1,6 +1,6 @@
 import Members.Child;
 import Members.Parent;
-import News.News;
+import Updates.Updates;
 import Tools.*;
 import StaffMembers.Staff;
 
@@ -13,7 +13,7 @@ public class Controller {
         Waitlist waitlist = new Waitlist();
         Schedule schedule = new Schedule();
         Checked checked = new Checked();
-        News news = new  News();
+        Updates updates = new Updates();
         HelpingMethods help = new HelpingMethods();
 
         Child.childArray = child.initialiseInfo();
@@ -22,7 +22,7 @@ public class Controller {
         Waitlist.waitlistArray = waitlist.initialiseInfo();
         Schedule.scheduleArray = schedule.initialiseInfo();
         Checked.checkedKidsArray = checked.initialiseInfo();
-        News.newsArray = news.initialiseInfo();
+        Updates.updatesArray = updates.initialiseInfo();
 
         //Tjekker om det er en ny dag, og wiper checkedKids array hvis det er.
         help.wipeArray();

@@ -1,7 +1,6 @@
 package StaffMembers;
 
 import Members.Child;
-import News.News;
 import Tools.*;
 
 import java.text.SimpleDateFormat;
@@ -91,6 +90,7 @@ public class StaffOptions
         newStaff.setAddress(stringScan.nextLine());
         newStaff.setRole("Staff");
         System.out.println("Venligst indtast password");
+        // TODO: 26-03-2020 dobbelttjek password
         newStaff.setPassword(stringScan.nextLine());
         Staff.staffArray.add(newStaff);
         staff.staffFileWriter(Staff.staffArray);

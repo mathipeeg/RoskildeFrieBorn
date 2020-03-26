@@ -2,7 +2,7 @@ package Tools;
 
 import Members.Child;
 import Members.Parent;
-import News.News;
+import Updates.Updates;
 import StaffMembers.Staff;
 
 import java.text.ParseException;
@@ -97,19 +97,19 @@ public class HelpingMethods {
         return null;
     }
 
-    public News getNews (int id)
+    public Updates getNews (int id)
     {
-        for (int i = 0; i < News.newsArray.size(); i++)
+        for (int i = 0; i < Updates.updatesArray.size(); i++)
         {
-            if (News.newsArray.get(i).getId() == id)
+            if (Updates.updatesArray.get(i).getId() == id)
             {
-                return News.newsArray.get(i);
+                return Updates.updatesArray.get(i);
             }
         }
         return null;
     }
 
-    public int getIndexNews(int id, ArrayList<News> array){
+    public int getIndexNews(int id, ArrayList<Updates> array){
         for (int i = 0; i < array.size(); i++) {
             if (array.get(i).getId() == id){
                 return i;
@@ -190,9 +190,9 @@ public class HelpingMethods {
                 }
             }
         } else if (object.equalsIgnoreCase("news")){
-            for (News news :
-                    News.newsArray) {
-                if (news.getId() == id){
+            for (Updates updates :
+                    Updates.updatesArray) {
+                if (updates.getId() == id){
                     return true;
                 }
             }

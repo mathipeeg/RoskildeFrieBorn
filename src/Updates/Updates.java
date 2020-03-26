@@ -1,4 +1,4 @@
-package News;
+package Updates;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,21 +7,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class News
+public class Updates
 {
-    public static ArrayList<News> newsArray = new ArrayList<>();
+    public static ArrayList<Updates> updatesArray = new ArrayList<>();
     private int id;
     private String headLine;
     private String body;
 
-    public News(int id, String headLine, String body)
+    public Updates(int id, String headLine, String body)
     {
         this.id = id;
         this.headLine = headLine;
         this.body = body;
     }
 
-    public News()
+    public Updates()
     {
     }
 
@@ -55,11 +55,11 @@ public class News
         this.body = body;
     }
 
-    public ArrayList<News> initialiseInfo() {
+    public ArrayList<Updates> initialiseInfo() {
         Scanner input = null;
         try
         {
-            input = new Scanner(new File("src/News/News"));
+            input = new Scanner(new File("src/Updates/Updates"));
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -78,23 +78,23 @@ public class News
 
             if (id != -1 && !headLine.equalsIgnoreCase("") && !body.equalsIgnoreCase(""))
             {
-                News news = new News(id, headLine, body);
-                newsArray.add(news);
+                Updates updates = new Updates(id, headLine, body);
+                updatesArray.add(updates);
 
                 id = -1;
                 headLine = "";
                 body = "";
             }
         }
-        return newsArray;
+        return updatesArray;
     }
 
-    public void newsFileWriter(ArrayList<News> newsArray){
+    public void newsFileWriter(ArrayList<Updates> updatesArray){
         FileWriter fileWriter;
         try
         {
-            fileWriter = new FileWriter("src/News/News");
-            writeNewsInfo(fileWriter, newsArray);
+            fileWriter = new FileWriter("src/Updates/Updates");
+            writeNewsInfo(fileWriter, updatesArray);
             fileWriter.close();
         } catch (IOException e)
         {
@@ -102,13 +102,13 @@ public class News
         }
     }
 
-    public void writeNewsInfo(FileWriter fileWriter, ArrayList<News> newsArray){
-        for (int i = 0; i < newsArray.size(); i++){
+    public void writeNewsInfo(FileWriter fileWriter, ArrayList<Updates> updatesArray){
+        for (int i = 0; i < updatesArray.size(); i++){
             try
             {
-                fileWriter.write("ID: " + newsArray.get(i).getId()+ "\n");
-                fileWriter.write("Overskrift: " + newsArray.get(i).getHeadLine() + "\n");
-                fileWriter.write("Indhold: " + newsArray.get(i).getBody() + "\n");
+                fileWriter.write("ID: " + updatesArray.get(i).getId()+ "\n");
+                fileWriter.write("Overskrift: " + updatesArray.get(i).getHeadLine() + "\n");
+                fileWriter.write("Indhold: " + updatesArray.get(i).getBody() + "\n");
 
             } catch (IOException e)
             {

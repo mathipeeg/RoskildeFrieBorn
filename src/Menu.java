@@ -1,7 +1,7 @@
 import Members.ChildOptions;
 import Members.Parent;
 import Members.ParentOptions;
-import News.NewsOptions;
+import Updates.UpdatesOptions;
 import Tools.HelpingMethods;
 import Tools.ScheduleOptions;
 import Tools.WaitlistOptions;
@@ -20,7 +20,7 @@ public class Menu
     ChildOptions childOptions = new ChildOptions();
     ScheduleOptions scheduleOptions = new ScheduleOptions();
     WaitlistOptions waitlistOptions = new WaitlistOptions();
-    NewsOptions newsOptions = new NewsOptions();
+    UpdatesOptions updatesOptions = new UpdatesOptions();
     HelpingMethods help = new HelpingMethods();
 
     public static int id = -1;
@@ -109,22 +109,26 @@ public class Menu
     public void options(Parent parent)
     {
         System.out.println("Velkommen " + parent.getFirstname() + "!");
-        while (true){
-            System.out.println("Vil du \n1) Se nyheder \n2) Ændr din information \n3) Afslut");
-            int choice = scanner.nextInt();
-            if (choice == 1){
-                System.out.println("NEWS");
-                // TODO: nyheder her ^
+        System.out.println("Vil du \n1) Se nyheder \n2)Opret nyheder \n3)Ændr nyheder \n4) Ændr din information \n5) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice){
+            case 1:
+                updatesOptions.seeUpdates();;
                 break;
-            } else if (choice == 2){
+            case 2:
+                updatesOptions.createUpdates();
+                break;
+            case 3:
+                updatesOptions.editUpdate();
+                break;
+            case 4:
                 parentOptions.editParent(parent.getId());
                 break;
-            } else if (choice == 3){
-                System.out.println("See ya :)");
+            case 5:
+                System.out.println("---------------------");
                 break;
-            } else{
-                System.out.println("Mærkeligt input alligevel...");
-            }
+            default:
+                break;
         }
     }
 
@@ -138,16 +142,16 @@ public class Menu
             // TODO: stilling check
 
             case 1:
-                newsOptions.seeNews();
+                updatesOptions.seeUpdates();
                 break;
             case 2:
-                newsOptions.createNews();
+                updatesOptions.createUpdates();
                 break;
             case 3:
-                newsOptions.editNews();
+                updatesOptions.editUpdate();
                 break;
             case 4:
-                newsOptions.deleteNews();
+                updatesOptions.deleteUpdate();
                 break;
             case 5:
                 break;
@@ -311,7 +315,6 @@ public class Menu
                 staffOptions.checkChild();
                 break;
             case 2:
-                // TODO: 22-03-2020 Lav metode, der wiper filen når dagen er omme evt brug Date?
                 staffOptions.checkOutChild();
                 break;
             case 3:
