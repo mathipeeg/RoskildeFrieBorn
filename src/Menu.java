@@ -132,32 +132,30 @@ public class Menu
     }
 
     public void newsOptions() {
-        while (true) {
-            System.out.println("Vil du \n1) Se opdateringer \n2) Opret opdateringer \n3) Ændre opdateringer \n4) " +
-                    "Slet opdateringer \n5) Afslut");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
-                // TODO: Dato, publisher
-                // TODO: stilling check
-                case 1:
-                    updatesOptions.seeUpdates();
-                    break;
-                case 2:
-                    updatesOptions.createUpdates();
-                    break;
-                case 3:
-                    updatesOptions.editUpdate();
-                    break;
-                case 4:
-                    updatesOptions.deleteUpdate();
-                    break;
-                case 5:
-                    break;
-                default:
-                    System.out.println("Not gonna happen");
-                    break;
-            }
+        System.out.println("Vil du \n1) Se opdateringer \n2) Opret opdateringer \n3) Ændre opdateringer \n4) " +
+                "Slet opdateringer \n5) Afslut");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            // TODO: Husk ID godkender, parents skal kun kunne se se nyheder
+            // TODO: Dato, publisher
+            // TODO: stilling check
+            case 1:
+                updatesOptions.seeUpdates();
+                break;
+            case 2:
+                updatesOptions.createUpdates();
+                break;
+            case 3:
+                updatesOptions.editUpdate();
+                break;
+            case 4:
+                updatesOptions.deleteUpdate();
+                break;
+            case 5:
+                break;
+            default:
+                System.out.println("Not gonna happen");
+                break;
         }
     }
 
