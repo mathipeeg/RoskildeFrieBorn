@@ -1,11 +1,8 @@
 package Main.Tools;
 
-import Main.Models.Schedule;
-import Main.Models.Staff;
-
+import Main.Models.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class ScheduleOptions {
 
