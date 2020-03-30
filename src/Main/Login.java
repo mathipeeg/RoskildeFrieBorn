@@ -3,7 +3,7 @@ package Main;
 import Main.Models.Child;
 import Main.Models.CurrentUser;
 import Main.Models.Parent;
-import Main.Tools.HelpingMethods;
+import Main.Tools.*;
 import Main.Models.Staff;
 
 import java.util.Scanner;

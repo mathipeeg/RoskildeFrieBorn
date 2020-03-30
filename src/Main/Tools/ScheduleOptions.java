@@ -44,7 +44,7 @@ public class ScheduleOptions {
 
     public void createMultipleShifts(Schedule newShift, String day, int memberId, String monthString, String year){
         String[] shift = help.validateStuff("dag og tid (dd, (t)t-tt)", "Hint: ex. 12, 7-17", help.shiftRegex, true).split(", ");
-        System.out.println("Hej breaktime pls, <TAL>");
+        System.out.println("Indtast pause i minutter.");
         for (int i = 0; i < shift.length; i+=2) {
             newShift = new Schedule();
             System.out.println(shift[i] + " " + shift[i+1]);

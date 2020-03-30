@@ -3,7 +3,7 @@ package Main.StaffMembers;
 import Main.Models.Child;
 import Main.Models.Staff;
 import Main.Models.Checked;
-import Main.Tools.HelpingMethods;
+import Main.Tools.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;

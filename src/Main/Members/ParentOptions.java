@@ -2,7 +2,7 @@ package Main.Members;
 
 import Main.Models.Child;
 import Main.Models.Parent;
-import Main.Tools.HelpingMethods;
+import Main.Tools.*;
 
 import java.util.Scanner;
 

@@ -3,7 +3,7 @@ package Main;
 import Main.Models.Child;
 import Main.Models.Parent;
 import Main.Models.Checked;
-import Main.Tools.HelpingMethods;
+import Main.Tools.*;
 import Main.Models.Schedule;
 import Main.Models.Waitlist;
 import Main.Models.Updates;
