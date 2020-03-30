@@ -1,8 +1,8 @@
 package StaffMembers;
 
-import Members.Child;
-import Members.Parent;
-import Organising.*;
+import Main.*;
+import Main.Models.*;
+import Main.Tools.HelpingMethods;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,8 +19,8 @@ public class Options
     Staff staff = new Staff();
     Schedule schedule = new Schedule();
     Waitlist waitlist = new Waitlist();
-    GetMethods get = new GetMethods();
-    News news = new News();
+    HelpingMethods help = new HelpingMethods();
+    Updates updates = new Updates();
 
     String birthdayRegex = "^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[-](19|20)\\d\\d$"; // dd/MM-yyyy
     String shiftTimeRegex = "(1[0-9]|[1-9]|2[0-4])-(1[0-9]|[1-9]|2[0-4])"; // 7-12
@@ -72,7 +72,7 @@ public class Options
         } else{
             id = parentId;
         }
-        Parent parent = get.getParent(id);
+        Parent parent = help.getParent(id);
         System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID \n3 Email \n4) Telefonnummer \5) Kontonummer \6) Adresse \7) Password");
         int choice = scanner.nextInt();
         switch (choice){
@@ -110,7 +110,7 @@ public class Options
 
         System.out.println("Indtast ID der skal slettes");
         int parentId = scanner.nextInt();
-        int parenti = get.getIndexParent(parentId, Parent.parentArray);
+        int parenti = help.getIndexParent(parentId, Parent.parentArray);
         Child.childArray.removeIf(child -> child.getParentId() == parentId);
         Parent.parentArray.remove(parenti);
 
@@ -223,7 +223,7 @@ public class Options
         for (Schedule schedule: Schedule.scheduleArray) {
             String monthi = splitMe(schedule, false);
             if (monthi.equalsIgnoreCase(month)){
-                Staff staff = get.getStaff(schedule.getId());
+                Staff staff = help.getStaff(schedule.getId());
                 if(!temp.equalsIgnoreCase(splitMe(schedule, true))){
                     System.out.println("\n");
                     System.out.println("Dato : " + schedule.getDate());
@@ -258,7 +258,7 @@ public class Options
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM-yyyy");
 
         int childId = scanner.nextInt();
-        Child child = get.getChild(childId);
+        Child child = help.getChild(childId);
         checked.setId(Checked.checkedKidsArray.size());
         checked.setChildId(childId);
         checked.setCheckIn(hourFormat.format(date));
@@ -278,7 +278,7 @@ public class Options
         System.out.println("Venligst indtast barnets ID");
         int childId = scanner.nextInt();
 
-        Checked checked = get.getCheckedChild(childId);
+        Checked checked = help.getCheckedChild(childId);
         String checkOut = hourFormat.format(date);
 
         int checkInHrs = splitTime(checked.getCheckIn(), true);
@@ -344,7 +344,7 @@ public class Options
     {
         System.out.println("Indtast ID på medarbejder der skal slettes");
         int id = scanner.nextInt();
-        int staffIndex = get.getIndexStaff(id, Staff.staffArray);
+        int staffIndex = help.getIndexStaff(id, Staff.staffArray);
         Staff.staffArray.remove(staffIndex);
         staff.staffFileWriter(Staff.staffArray);
         System.out.println("Du har nu slettet en medarbejder");
@@ -354,7 +354,7 @@ public class Options
     {
         System.out.println("Du vil aendre en medarbejders oplysninger -> Indtast medarbejder ID");
         int id = scanner.nextInt();
-        Staff staff = get.getStaff(id);
+        Staff staff = help.getStaff(id);
         System.out.println("Her er dine valgmuligheder \n1) Fornavn \n2) Efternavn \n3) Email \n4) " +
                 "Telefon \n5) Adresse \n6) Stilling \n7) Kodeord");
         int choice = scanner.nextInt();
@@ -400,7 +400,7 @@ public class Options
     {
         System.out.println("Lad os ændre et barn! \nIndtast ID på barn, der skal ændres");
         int id = scanner.nextInt();
-        Child child = get.getChild(id);
+        Child child = help.getChild(id);
         System.out.println("Hvilken info skal ændres? \n1) Fornavn \n2) Efternavn \n3) Forældre ID");
         int choice = scanner.nextInt();
         switch (choice)
@@ -454,7 +454,7 @@ public class Options
                 childId = Waitlist.waitlistArray.get(i).getId();
             }
         }
-        int childIndex = get.getIndexChild(childId, Child.childArray);
+        int childIndex = help.getIndexChild(childId, Child.childArray);
         Waitlist.waitlistArray.remove(childIndex);
         waitlist.waitlistFileWriter(Waitlist.waitlistArray);
         System.out.println("THE KID HAS BEEN ABO--- DELETED");
@@ -535,17 +535,17 @@ public class Options
     public void createNews()
     {
         System.out.println("Du har valgt at oprette nye nyheder");
-        News newNews = new News();
+        Updates newNews = new Updates();
 
-        newNews.setId(News.newsArray.size());
+        newNews.setId(Updates.updatesArray.size());
         System.out.println("Venlig indtast en overskrift");
         newNews.setHeadLine(s.nextLine());
         System.out.println("Skriv noget indhold");
         newNews.setBody(s.nextLine());
 
 
-        News.newsArray.add(newNews);
-        news.newsFileWriter(News.newsArray);
+        Updates.updatesArray.add(newNews);
+        updates.updateFileWriter(Updates.updatesArray);
         System.out.println("Dine nyheder er lavet, TILLYKKE!");
 
 
@@ -553,11 +553,11 @@ public class Options
 
     public void seeNews()
     {
-        for (int i = 0; i < News.newsArray.size(); i++)
+        for (int i = 0; i < Updates.updatesArray.size(); i++)
         {
             System.out.println("Du har valgt at se nyheder");
-            System.out.println("Virker det ?" + News.newsArray.get(i).getHeadLine());
-            System.out.println(News.newsArray.get(i).getBody());
+            System.out.println("Virker det ?" + Updates.updatesArray.get(i).getHeadLine());
+            System.out.println(Updates.updatesArray.get(i).getBody());
         }
     }
 
@@ -565,7 +565,7 @@ public class Options
     {
         System.out.println("Du har valgt at ændre nogle nyheder \nIndtast ID på nyheden, der skal ændres");
         int id = scanner.nextInt();
-        News news = get.getNews(id);
+        Updates news = help.getUpdates(id);
         System.out.println("Hvilken info skal ændres? \n1) Overskrift \n2) Indhold \n3) Afslut");
         int choice = scanner.nextInt();
         switch (choice)
@@ -582,17 +582,16 @@ public class Options
                 System.out.println("Afslut");
                 break;
         }
-        news.newsFileWriter(News.newsArray);
+        news.updateFileWriter(Updates.updatesArray);
     }
 
     public void deleteNews()
     {
         System.out.println("Indtast ID på nyhed der skal slettes");
         int id = scanner.nextInt();
-        int newsIndex = get.getIndexNews(id, News.newsArray);
-        News.newsArray.remove(newsIndex);
-        news.newsFileWriter(News.newsArray);
+        int newsIndex = help.getIndexUpdates(id, Updates.updatesArray);
+        Updates.updatesArray.remove(newsIndex);
+        updates.updateFileWriter(Updates.updatesArray);
         System.out.println("Nyhederne er nu slettet");
-
     }
 }
