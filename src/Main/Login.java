@@ -52,7 +52,7 @@ public class Login {
                 }
             }
             System.out.println("Username or pass was wrong, sorry, man.");
-            return currentUser;
+            return null;
         }
         return null;
     }

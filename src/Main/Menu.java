@@ -2,9 +2,7 @@ package Main;
 
 import Main.Members.*;
 import Main.Models.*;
-import Main.Tools.HelpingMethods;
-import Main.Tools.ScheduleOptions;
-import Main.Tools.WaitlistOptions;
+import Main.Tools.*;
 import Main.Updates.UpdatesOptions;
 import Main.StaffMembers.*;
 
@@ -26,9 +24,9 @@ public class Menu
     public static CurrentUser CURRENTUSER = null;
 
     public void menu() throws ParseException {
-        while (true) {
-            System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre?");
-            int choice = scanner.nextInt();
+        System.out.println("Velkommen til Roskilde Frie Boernehave! Er du 1) medarbejder eller 2) Forældre?");
+        int choice = scanner.nextInt();
+        while (CURRENTUSER == null) {
             if (choice == 1){
                 CURRENTUSER = login.logIn();
                 if (CURRENTUSER != null){
@@ -47,7 +45,6 @@ public class Menu
             }else {
                 System.out.println("Mærkeligt input alligevel...");
             }
-            break;
         }
     }
 
@@ -297,7 +294,7 @@ public class Menu
     public void checkedInOut() throws ParseException {
 
         for (Checked checked : Checked.checkedKidsArray) {
-            if (checked.getCheckOut().equalsIgnoreCase("0")){
+            if (checked.getCheckOut().equalsIgnoreCase("0")) {
                 Child child = help.getChild(checked.getChildId());
                 System.out.println(child.getFirstname() + " " + child.getLastname() + " ✓");
             }
