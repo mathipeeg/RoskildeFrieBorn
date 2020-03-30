@@ -57,17 +57,16 @@ public class WaitlistOptions {
 
     public void getWaitlist()
     {
-        for (int i = 0; i < Waitlist.waitlistArray.size(); i++)
-        {
-            System.out.println("Barnets ID: " + Waitlist.waitlistArray.get(i).getId());
-            System.out.println("Barnets navn: " + Waitlist.waitlistArray.get(i).getChildFirstname() +
-                    " " + Waitlist.waitlistArray.get(i).getChildLastname());
-            System.out.println("Foedsels dato (DD/MM-YYYY): " + Waitlist.waitlistArray.get(i).getBirthdate());
-            System.out.println("Foraeldre navn: " + Waitlist.waitlistArray.get(i).getParentFirstname() +
-                    " " + Waitlist.waitlistArray.get(i).getParentLastname());
-            System.out.println(" Tlf.: " + Waitlist.waitlistArray.get(i).getPhone() +
-                    " Adresse: " + Waitlist.waitlistArray.get(i).getAddress());
-            System.out.println("E-mail: " + Waitlist.waitlistArray.get(i).getEmail());
+        for (Waitlist waitlist : Waitlist.waitlistArray) {
+            System.out.println("Barnets ID: " + waitlist.getId());
+            System.out.println("Barnets navn: " + waitlist.getChildFirstname() +
+                    " " + waitlist.getChildLastname());
+            System.out.println("Foedsels dato (DD/MM-YYYY): " + waitlist.getBirthdate());
+            System.out.println("Foraeldre navn: " + waitlist.getParentFirstname() +
+                    " " + waitlist.getParentLastname());
+            System.out.println(" Tlf.: " + waitlist.getPhone() +
+                    " Adresse: " + waitlist.getAddress());
+            System.out.println("E-mail: " + waitlist.getEmail());
             System.out.println("\n-------------------------------------------------\n");
         }
     }

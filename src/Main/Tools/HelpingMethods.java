@@ -2,6 +2,7 @@ package Main.Tools;
 
 import Main.Models.*;
 import Main.Models.Updates;
+import Main.*;
 
 import java.text.*;
 import java.util.*;
@@ -127,10 +128,10 @@ public class HelpingMethods {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Venligst indtast " + attribute);
-            String k = scanner.nextLine();
-            if (k.matches(regex)) {
-                //Hvis k overholder regex, then return k.
-                return k;
+            String input = scanner.nextLine();
+            if (input.matches(regex)) {
+                //Hvis input overholder regex, then return input.
+                return input;
             }
             System.out.println(hint);
         }
